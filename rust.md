@@ -6,10 +6,12 @@
 # 变量 #
 ## 数据类型 ##
 1. bool
+2. char 字符 rust中字符为32位 可以存储汉字
 ## 变量定义 ##
 + rust声明变量需要使用mut 否则为常量 不可修改
 1. 常量
 ```rust
+const MAX_POINT:U32=10000;
 fn main() {
     let a:u32=1;
     println!("Hello, rust!{}",a);
