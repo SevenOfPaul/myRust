@@ -11,7 +11,8 @@
 4. u8 u15 u32 u64 无符号整型
 5. f32 f64 浮点型
 6. isize usize自适应类型 针对不同平台分配不同的大小
-7. 
+7. [type;size]=[data] 数组`let e:[char;3]=['你','好','吗'];`
+8. 元组 `let t:(u32,i32,char)=(12,-12,'t'); print!(t.0) `
 ## 变量定义 ##
 + rust声明变量需要使用mut 否则为常量 不可修改
 1. 常量
@@ -29,3 +30,16 @@ fn main() {
     println!("Hello, rust!{}",a);
 }
 ```
+## 流程控制 ##
+1. if
+```rust
+ if true{
+   println!("Hello, rust!{}&{}",a,MAX_POINT);
+}
+```
+2. for
+```rust
+for i in e{
+   print!("{}",i)
+}
+ ```

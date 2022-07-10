@@ -5,9 +5,15 @@ fn main() {
     let c:char='你';
     let d:char='好';
     let e:[char;3]=['你','好','吗'];
+    let t:(u32,i32,char)=(12,-12,'t');
     if b{
         println!("Hello, rust!{}&{}",a,MAX_POINT);
     }
     a=3;
-    print!("Hello, rust!{},{}{}&{}\n{}{}{}?",a,c,d,isize::max_value(),e[0],e[1],e[2]);
+    println!("Hello, rust!{},{}{}&{}",a,c,d,isize::max_value());
+    for i in e{
+          print!("{}",i)
+       
+    }
+    print!("?{}{}{}",t.0,t.1,t.2)
 }
