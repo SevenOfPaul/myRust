@@ -24,5 +24,13 @@ fn main() {
     for i in 0..10{
         println!("{}",i);
     }
-    print!("?{}{}{},{}",t.0,t.1,t.2,number)
+    print!("?{}{}{},{}",t.0,t.1,t.2,number);
+    let f=loop{
+        a+=1;
+        print!("{}",a);
+        if a>=100{
+            break a;
+        }
+       };
+       print!("{}",f);
 }

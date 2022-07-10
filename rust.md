@@ -44,13 +44,33 @@ let (x,y,z)=t;
    println!("Hello, rust!{}&{}",a,MAX_POINT);
 }
 ```
-2. for
+2.if 语法糖
+```rust
+let number=if condition {
+     5
+    } else {
+    6
+};
+//注意不要加分号 且 if和else的返回值必须是同一类型
+```
+2.loop
+```rust
+  let f=loop{
+        a+=1;
+        print!("{}",a);
+        if a>=100{
+            break a;
+        }
+       };
+       print!("{}",f);
+```
+3. for
 ```rust
 for i in e{
    print!("{}",i)
 }
  ```
-3.for 语法糖
+4.for 语法糖
 ```rust
 for i in 0..10{
         println!("{}",i);
@@ -61,6 +81,13 @@ for i in 0..10{
 for _ in 0..10{
         println!("{}","好");
     }
+ ```
+5. while 循环
+```rust
+while i!=10{
+    i=i+1;
+    print!("{}",i)
+}
  ```
  ```
  存储在2022-7-8
