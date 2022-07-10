@@ -30,6 +30,13 @@ fn main() {
     println!("Hello, rust!{}",a);
 }
 ```
+3. 元组解构
+```rust
+let t:(u32,i32,char)=(12,-12,'t')
+let (x,y,z)=t;
+ print!(t.0)
+ print!(x)
+ ```
 ## 流程控制 ##
 1. if
 ```rust
@@ -42,4 +49,7 @@ fn main() {
 for i in e{
    print!("{}",i)
 }
+ ```
+ ```
+ 存储在2022-7-8
  ```
