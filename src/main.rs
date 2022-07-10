@@ -6,14 +6,23 @@ fn main() {
     let d:char='好';
     let e:[char;3]=['你','好','吗'];
     let t:(u32,i32,char)=(12,-12,'t');
+    let condition=true;
     if b{
         println!("Hello, rust!{}&{}",a,MAX_POINT);
     }
     a=3;
+    let number=if condition {
+        5
+    } else {
+        6
+    };
     println!("Hello, rust!{},{}{}&{}",a,c,d,isize::max_value());
-    for i in e{
+    for i in &e{
           print!("{}",i)
        
     }
-    print!("?{}{}{}",t.0,t.1,t.2)
+    for i in 0..10{
+        println!("{}",i);
+    }
+    print!("?{}{}{},{}",t.0,t.1,t.2,number)
 }
