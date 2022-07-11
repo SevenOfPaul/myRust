@@ -4,9 +4,10 @@ fn test(a:isize)->isize{
 }
 fn main(){
     let a:isize=16;
-    
     let b:isize=test(a);
-    let s:String=String::from("字符串");
-    let c=&s;
-    print!("b={}&a={}",b,c)
+    let mut s:String=String::from("字符串");
+    s.push_str("你好吗");
+    let s2=s.clone();
+    let s = String::from("hello");  // s 进入作用域
+    print!("b={}&a={}&s2={}",b,s,s2)
 }

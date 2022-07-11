@@ -120,4 +120,40 @@ fn test(number:i32)->i32{
 4. 字符串类型大小不固定
 5. Rust 中每一个值都被一个变量所拥有，该变量被称为值的所有者
 6. 一个值同时只能被一个变量所拥有，或者说一个值只能拥有一个所有者
-7. 当所有者(变量)离开作用域范围时，这个值将被丢弃(drop)
+7. 当所有者(变量)离开作用域范围时，这个变量将被丢弃(drop)
+```rust
+let s1 = String::from("hello");
+let s2 = s1;
+println!("{}, world!", s1);
+ ```
+ ```rust
+ error[E0382]: use of moved value: `s1`
+ --> src/main.rs:5:28
+  |
+3 |     let s2 = s1;
+  |         -- value moved here
+4 |
+5 |     println!("{}, world!", s1);
+  |                            ^^ value used here after move
+  |
+  = note: move occurs because `s1` has type `std::string::String`, which does
+  not implement the `Copy` trait
+ ```
+8. Rust 永远也不会自动创建数据的 “深拷贝”。因此，任何自动的复制都不是深拷贝，可以被认为对运行时性能影响较小。
+9.如果我们确实需要深度复制 String 中堆上的数据，而不仅仅是栈上的数据，可以使用一个叫做 clone 的方法。
+```rust
+let s1 = String::from("hello");
+let s2 = s1.clone();
+
+println!("s1 = {}, s2 = {}", s1, s2);
+```
+10.Rust 有一个叫做 Copy 的特征，可以用在类似整型这样在栈中存储的类型。如果一个类型拥有 Copy 特征，一个旧的变量在被赋值给其他变量后仍然可用。
+11.如下是一些 Copy 的类型：
+```xml
+所有整数类型，比如 u32。
+布尔类型，bool，它的值是 true 和 false。
+所有浮点数类型，比如 f64。
+字符类型，char。
+元组，当且仅当其包含的类型也都是 Copy 的时候。比如，(i32, i32) 是 Copy 的，但 (i32, String) 就不是。
+不可变引用 &T ，例如转移所有权中的最后一个例子，但是注意: 可变引用 &mut T 是不可以 Copy的
+```
