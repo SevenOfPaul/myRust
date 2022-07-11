@@ -13,6 +13,7 @@
 6. isize usize自适应类型 针对不同平台分配不同的大小
 7. [type;size]=[data] 数组`let e:[char;3]=['你','好','吗'];`
 8. 元组 `let t:(u32,i32,char)=(12,-12,'t'); print!(t.0) `
+9. 字符串类型 `let s:String=String::from("字符串");`
 ## 变量定义 ##
 + rust声明变量需要使用mut 否则为常量 不可修改
 1. 常量
@@ -97,12 +98,26 @@ while i!=10{
 ```rust
 fn test(number:i32)->i32{
  print!("你好{}",number);
- return number+1
+ return number+1;
 }
 fn main(){
     let mut a:i32=16;
     let b:i32=test(a);
     print!("{}",b)
 }
-
  ```
+ 2.在明确返回类型时 rust可以去掉return
+```rust
+fn test(number:i32)->i32{
+ print!("你好{}",number);
+  number+1
+}
+ ```
+## rust所有权 ##
+1. rust通过所有权机制来控制内存
+2. 编译的数据的类型大小是固定的 分配在栈上 不固定则分配在堆上
+3. rust和cpp一样 函数参数传入是复制值
+4. 字符串类型大小不固定
+5. Rust 中每一个值都被一个变量所拥有，该变量被称为值的所有者
+6. 一个值同时只能被一个变量所拥有，或者说一个值只能拥有一个所有者
+7. 当所有者(变量)离开作用域范围时，这个值将被丢弃(drop)

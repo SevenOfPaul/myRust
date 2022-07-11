@@ -1,9 +1,12 @@
-fn test(number:i32)->i32{
- print!("你好{}",number);
- return number+1
+fn test(a:isize)->isize{
+ print!("你好{}",a);
+  a+1
 }
 fn main(){
-    let mut a:i32=16;
-    let b:i32=test(a);
-    print!("{}",b)
+    let a:isize=16;
+    
+    let b:isize=test(a);
+    let s:String=String::from("字符串");
+    let c=&s;
+    print!("b={}&a={}",b,c)
 }
