@@ -9,5 +9,12 @@ fn main(){
   let s2=&s[0..s.len()];
   //在对字符串使用切片语法时需要格外小心，切片的索引必须落在字符之间的边界位置，
   //也就是 UTF-8 字符的边界，例如中文在 UTF-8 中占用三个字节,下面的代码就会崩溃:
-  print!("two={}\nthree={}\ns2={}",two,three,s2);
+  let hw:[char;5]=['h','e','l','l','o'];
+  let mut wh=hw.clone();
+  for v in 0..5{
+      wh[v]=hw[hw.len()-1-v];
+      print!("{}", hw[v]);
+  }
+  print!("\ntwo={}\nthree={}\ns2={}",two,three,s2);
+  println!("{:?}",wh)
 }
