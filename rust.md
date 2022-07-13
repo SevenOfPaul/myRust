@@ -14,6 +14,7 @@
 7. [type;size]=[data] 数组`let e:[char;3]=['你','好','吗'];`
 8. 元组 `let t:(u32,i32,char)=(12,-12,'t'); print!(t.0) `
 9. 字符串类型 `let s:String=String::from("字符串");`
+10. 切片 &str ` let s=String::from("hello world!");  let s2=&s[0..5];`
 ## 变量定义 ##
 + rust声明变量需要使用mut 否则为常量 不可修改
 1. 常量
