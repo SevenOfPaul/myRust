@@ -186,3 +186,32 @@ fn dangle() -> &String {
 }
 //编译器会报错
 ```
+### 切片 ###
+1. 切片就是对 复杂 类型中某一部分的引用，它看起来像这样
+```rust
+let s = String::from("hello");
+let slice = &s[0..2];//he
+let slice = &s[..2];//he
+let slice = &s[..=1];
+```
+#### 切片方法 ####
+1.追加 在字符串尾部可以使用 push() 方法追加字符 char，也可以使用 push_str() 方法追加字符串字面量。
+```rust
+fn main() {
+    let mut s = String::from("Hello ");
+    s.push('r');
+    println!("追加字符 push() -> {}", s);
+    s.push_str("ust!");
+    println!("追加字符串 push_str() -> {}", s);
+}
+ ```
+2. 插入 可以使用 insert() 方法插入单个字符 char，也可以使用 insert_str() 方法插入字符串字面量
+```rust
+fn main() {
+    let mut s = String::from("Hello rust!");
+    s.insert(5, ',');
+    println!("插入字符 insert() -> {}", s);
+    s.insert_str(6, " I like");
+    println!("插入字符串 insert_str() -> {}", s);
+}
+```
