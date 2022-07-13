@@ -98,7 +98,6 @@ while i!=10{
 ```rust
 fn test(number:i32)->i32{
  print!("你好{}",number);
- return number+1;                                                                                                                                   ```                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 }
 fn main(){
     let mut a:i32=16;
@@ -156,4 +155,33 @@ println!("s1 = {}, s2 = {}", s1, s2);
 字符类型，char。
 元组，当且仅当其包含的类型也都是 Copy 的时候。比如，(i32, i32) 是 Copy 的，但 (i32, String) 就不是。
 不可变引用 &T ，例如转移所有权中的最后一个例子，但是注意: 可变引用 &mut T 是不可以 Copy的
+```
+ 存储在2022-7-10
+ ### 引用 ###
+ 1.常规引用是一个指针类型，指向了对象存储的内存地址。` let x = 5; let y = &x;`
+ 2. 可变引用 可以改变原数据的引用
+```rust
+fn main() {
+    let s = String::from("hello");
+
+    change(&s);
+}
+fn change(some_string: &String) {
+    some_string.push_str(", world");
+}
+ let mut two:isize=2;
+ let five=&mut two;
+```
+ 3. 可变引用同时只能存在一个
+ 4. 可变引用与不可变引用不能同时存在
+ 5. 悬垂引用也叫做悬垂指针，意思为指针指向某个值后，这个值被释放掉了，而指针仍然存在
+```rust
+  fn main() {
+    let reference_to_nothing = dangle();
+}
+fn dangle() -> &String {
+    let s = String::from("hello");
+    &s
+}
+//编译器会报错
 ```
