@@ -291,6 +291,11 @@ struct Color(i32, i32, i32);
   println!("{:?}",black);
 ```
 ### 方法 ###
+1. 在方法中，我们使用 &self 替代this 
+2. self 依然有所有权的概念：
+   + self 表示 Rectangle 的所有权转移到该方法中，这种形式用的较少
+   + &self 表示该方法对 Rectangle 的不可变借用
+   + &mut self 表示可变借用
 ```rust
 struct User {
   active: bool,
@@ -309,3 +314,17 @@ impl User{
 user2.get_name();
 user2.get_id();
 ```
+3. 构造函数
+```rust
+impl User{
+  fn new(username:String,email:String)->User{
+    User{
+      username,
+      active:false,
+      email,
+      id:3,
+     }
+  }
+}
+ let user4=User::new("user4".to_string(),"1245@qq".to_string());
+ ```

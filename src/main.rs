@@ -1,3 +1,4 @@
+#[derive(Debug)]
 struct User {
   active: bool,
   username: String,
@@ -19,6 +20,14 @@ impl User{
   fn get_id(&self){
     println!("{:?}",&self.id);
   }
+  fn new(username:String,email:String)->User{
+    User{
+      username,
+      active:false,
+      email,
+      id:3,
+     }
+  }
 }
 #[derive(Debug)]
 struct Color(i32, i32, i32);
@@ -38,8 +47,10 @@ fn main(){
  };
  let black = Color(0, 0, 0);
  let user3=create_user(String::from("第三个宝贝"), String::from("3167385363!"));
+ let user4=User::new("user4".to_string(),"1245@qq".to_string());
   println!("姓名:{}\n邮箱:{}\nid:{}",user.username,user2.email,user.id);
   println!("姓名:{}\n邮箱:{}\nid:{}",user3.username,user3.email,user3.id);
   user2.get_name();
   println!("{:?}",black);
+  println!("{:?}",user4);
 }
