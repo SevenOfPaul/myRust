@@ -268,3 +268,44 @@ fn create_user(username:String,email:String)->User{
 let user3=create_user(String::from("第三个宝贝"), String::from("3167385363!"));
 println!("姓名:{}\n邮箱:{}\nid:{}",user3.username,user3.email,user3.id);
 ```
+4. 元组结构体
+  + 字段结构体
+  + 圆括号
+  + 结构体必须要有名称，但是结构体的字段可以没有名称，这种结构体长得很像元组，因此被称为元组结构体
+```rust
+struct Color(i32, i32, i32);
+ let black = Color(0, 0, 0);
+ println!()
+```
+ 5. 单元结构体
+  + 定义一个类型，但是不关心该类型的内容, 只关心它的行为时，就可以使用 单元结构体 
+```rust
+struct A{
+  
+}
+ ```
+ 6. 打印结构体
+```rust
+#[derive(Debug)]
+struct Color(i32, i32, i32);
+  println!("{:?}",black);
+```
+### 方法 ###
+```rust
+struct User {
+  active: bool,
+  username: String,
+  email: String,
+  id: i32,
+}
+impl User{
+  fn get_name(&self){
+    println!("{:?}",&self.username);
+  }
+  fn get_id(&self){
+    println!("{:?}",&self.id);
+  }
+}
+user2.get_name();
+user2.get_id();
+```
