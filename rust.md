@@ -328,3 +328,30 @@ impl User{
 }
  let user4=User::new("user4".to_string(),"1245@qq".to_string());
  ```
+### 枚举类型 ###
+1. c语言方式声明
+```rust
+#[derive(Debug)]
+enum IpAddKind {
+  Ipv4,
+  Ipv6
+}
+#[derive(Debug)]
+struct IpAdd{
+  kind:IpAddKind,
+  address:String
+}
+ let ip=IpAdd{
+      kind:IpAddKind::Ipv4,
+      address:"127.0.0.1".to_string()
+    };
+   print!("{:?}",ip)
+```
+2. rust方式
+```rust
+enum IpAddKind {
+  Ipv4(String),
+  Ipv6(String)
+}
+let ip=IpAddKind::Ipv4(String::from("127.0.0.1"))
+```
