@@ -219,4 +219,52 @@ fn main() {
 ```
 以上存储在2022-8-13
 ## 结构体 ##
-1.
+1.创建结构体与访问结构体
+```rust
+struct User {
+  active: bool,
+  username: String,
+  email: String,
+  id: i32,
+}
+ let mut user=User{
+    active:false,
+    username:String::from("大宝贝"),
+    email:String::from("3167385363@qq.com"),
+    id:6578962,
+  };
+   println!("姓名:{}\n邮箱:{}\nid:{}",user.username,user.email,user.id);
+ ```
+2.结构体快速更新语法
+   + user2 仅仅在 email 上与 user1 不同，因此我们只需要对 email 进行赋值，剩下的通过结构体更新语法 ..user1 即可完成。
+   + .. 语法表明凡是我们没有显示声明的字段，全部从 user1 中自动获取。需要注意的是 ..user1 必须在结构体的尾部使用。
+```rust
+ let mut user=User{
+    active:false,
+    username:String::from("大宝贝"),
+    email:String::from("3167385363@qq.com"),
+    id:6578962,
+  };
+let user2=User{
+  username:String::from("不是宝贝的宝贝"),
+  ..user
+ };
+ //结构体更新语法跟赋值语句 = 非常相像，在上面代码中，user1 的部分字段所有权被转移到 user2 中：
+ //username 字段发生了所有权转移，作为结果，user1 无法再被使用。
+ println!("{}", user1.active);
+// 下面这行会报错
+println!("{:?}", user1);
+ ```
+3. 构建函数 它接收两个字符串参数： email 和 username，然后使用它们来创建一个 User 结构体，并且返回。
+```rust
+fn create_user(username:String,email:String)->User{
+   User{
+    username,
+    active:false,
+    email,
+    id:3,
+   }
+}
+let user3=create_user(String::from("第三个宝贝"), String::from("3167385363!"));
+println!("姓名:{}\n邮箱:{}\nid:{}",user3.username,user3.email,user3.id);
+```
