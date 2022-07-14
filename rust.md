@@ -355,3 +355,11 @@ enum IpAddKind {
 }
 let ip=IpAddKind::Ipv4(String::from("127.0.0.1"))
 ```
+3. 可以是不同类型
+```rust
+enum IpAdd{
+    v4(i8,i8,i8),
+    v6(String)
+}
+let ip=IpAddKind::Ipv4(127,0,0,1)
+```
