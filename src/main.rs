@@ -41,6 +41,22 @@ struct IpAdd{
   kind:IpAddKind,
   address:String
 }
+enum Message {
+    Quit,//默认类型
+    Move { x: i32, y: i32 },//结构体类型
+    Write(String),//元组类型
+    ChangeColor(i32, i32, i32),//元组类型
+}
+impl Message {
+    fn print(&self){
+    match *self{
+      Message::Quit=>println!("Quit"),
+      Message::Move { x, y }=>println!("Move x={} y={}",x,y),
+      Message::ChangeColor(a,b,c)=>println!("ChangeColor a={},b={},c={}",a,b,c),
+       _=>print!("Write")
+    }
+    }
+  }
 fn main() {
     let mut user = User {
         active: false,

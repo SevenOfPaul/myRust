@@ -328,7 +328,7 @@ impl User{
 }
  let user4=User::new("user4".to_string(),"1245@qq".to_string());
  ```
-### 枚举类型 ###
+### 枚举类型与模式匹配 ###
 1. c语言方式声明
 ```rust
 #[derive(Debug)]
@@ -362,4 +362,51 @@ enum IpAdd{
     v6(String)
 }
 let ip=IpAddKind::Ipv4(127,0,0,1)
+```
+4. 不同类型
+```rust
+enum Message {
+    Quit,//默认类型
+    Move { x: i32, y: i32 },//结构体类型
+    Write(String),//元组类型
+    ChangeColor(i32, i32, i32),//元组类型
+}
+fn main() {
+    let m1 = Message::Quit;
+    let m2 = Message::Move{x:1,y:1};
+    let m3 = Message::ChangeColor(255,255,0);
+}
+```
+5. 枚举方法与match匹配
+```rust
+enum Message {
+    Quit,//默认类型
+    Move { x: i32, y: i32 },//结构体类型
+    Write(String),//元组类型
+    ChangeColor(i32, i32, i32),//元组类型
+}
+impl Message {
+  fn print(){
+  match *self{
+    Message::Quit=>println("Quit"),
+    Message::Move(x,y)=>println("Move x={} y={}",x,y),
+    Message::ChangeColor(a,b,c)=>println("ChangeColor a={},b={},c={}",a,b,c),
+     _::Write(&s)=>print("Write={}",)
+  }
+  }
+}
+ ```
+6. 模式匹配
+   + match 的匹配必须要穷举出所有可能，因此这里用 _ 来代表未列出的所有可能性
+   + match 的每一个分支都必须是一个表达式，且所有分支的表达式最终返回值的类型必须相同
+```rust
+match target {
+    模式1 => 表达式1,
+    模式2 => {
+        语句1;
+        语句2;
+        表达式2
+    },
+    _ => 表达式3
+}
 ```
