@@ -457,3 +457,39 @@ match target {
     println!("出错啦")
   }
  ```
+4.可变引用遍历
+```rust
+ for v in &mut _v2{
+    *v+=1;
+    println!("{:?}",v)
+  }
+ ```
+5. 使用枚举存储不同类型的数据
+```rust
+enum conText{
+    Text(String),
+    Float(f32),
+    Int(i8)
+}
+  let _v3:Vec<conText>=vec![conText::Text("你好".to_string()),
+    conText::Int(1),
+    conText::Text("很灵活".to_string()),
+    conText::Float(0.7)
+    ];
+ ```
+   ### String ###
+1. 创建字符串
+```rust
+let mut s=String::new();
+let mut s2=String::from("hello");
+let mut s3="world".to_string();
+ ```
+2. 合并字符串
+```rust
+//追加字符串
+s.push_str("rust")
+//追加字符
+s.push('q')
+//第一个加数为值 其余为引用
+let s3=s1+s&2
+ ```
