@@ -396,7 +396,21 @@ impl Message {
   }
 }
  ```
-6. 模式匹配
+6. Option泛型表示空值
+   + 为了使用 Option<T> 值，需要使用mathc编写处理每个成员的代码。你想要一些代码只当拥有 Some(T) 值时运行，允许这些代码使用其中的 T
+  ```rust
+   enum Option<T>{
+    Some(T),
+    None,
+   }
+    let some_number = Some(5);
+    let absent_number: Option<i32> =Option::None;
+      match some_number {
+        Some(i) => temp = i,
+        None => print!("do nothing"),
+    }
+  ```
+7. 模式匹配
    + match 的匹配必须要穷举出所有可能，因此这里用 _ 来代表未列出的所有可能性
    + match 的每一个分支都必须是一个表达式，且所有分支的表达式最终返回值的类型必须相同
 ```rust
@@ -410,3 +424,14 @@ match target {
     _ => 表达式3
 }
 ```
+   + if let
+   + 当你只要匹配一个条件，且忽略其他条件时就用 if let ，否则都用 match
+   ```rust
+   enum Option<T>{
+    Some(T),
+    None,
+   }
+   if let Some(3) = v {
+    println!("three");
+}
+   ```
