@@ -515,4 +515,5 @@ let s3=s1+s&2
  ### hashMap ###
 1. Rust 中哈希类型（哈希映射）为 HashMap<K,V>
 ## 包模块管理 ##
-1. 
+1. Package 项目/工程
+2. Crate  包/模块
