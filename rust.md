@@ -427,12 +427,33 @@ match target {
    + if let
    + 当你只要匹配一个条件，且忽略其他条件时就用 if let ，否则都用 match
 ```rust
-   enum Option<T>{
-    Some(T),
-    None,
-   }
-   if let Some(3) = v {
-    println!("three");
+    let _v2 = vec![1, 2, 3];
+   if let Some(i) = &_v2.get(0){
+    println!("{:?}",i)
+  }
 }
 ```
  ##  vector与String和HashMap ##
+  ### vector ###
+ 1. vector是动态数组
+```rust
+ let mut v:Vec<i32>=Vec::new();
+ //vector宏
+ let v2 = vec![1, 2, 3];
+```
+2. 读取方法-下标读取
+```rust
+ let v2 = vec![1, 2, 3];
+ print!("{}",&v2[0])
+ ```
+3.读取方法-get读取
+  + 下标读取到的是Some(T) 若出现数组越界 则为None
+```rust
+ let v2 = vec![1, 2, 3];
+  if let Some(i) = &_v2.get(0){
+    println!("{:?}",i)
+  }
+  if let None = &_v2.get(4){
+    println!("出错啦")
+  }
+ ```
