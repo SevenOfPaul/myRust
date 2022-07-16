@@ -493,3 +493,26 @@ s.push('q')
 //第一个加数为值 其余为引用
 let s3=s1+s&2
  ```
+ 3. 下标打印字符串
+    + 必须转换为切片 在利用切片的特性
+```rust
+  let s4="hello".to_string()+&"rust".to_string()+&s3;
+ let str=&s4[0..=2];
+  println!("{}",s4);
+```
+   + chars方法 字符打印
+```rust
+   for c in s4.chars(){
+    println!("c={}",c)
+   }
+```
+  + bytes方法 字节打印
+```rust
+   for c in s4.bytes(){
+    println!("c={}",c)
+   }
+```
+ ### hashMap ###
+1. Rust 中哈希类型（哈希映射）为 HashMap<K,V>
+## 包模块管理 ##
+1. 
