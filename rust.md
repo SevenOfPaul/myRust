@@ -426,7 +426,7 @@ match target {
 ```
    + if let
    + 当你只要匹配一个条件，且忽略其他条件时就用 if let ，否则都用 match
-   ```rust
+```rust
    enum Option<T>{
     Some(T),
     None,
@@ -434,4 +434,5 @@ match target {
    if let Some(3) = v {
     println!("three");
 }
-   ```
+```
+ ##  vector与String和HashMap ##
