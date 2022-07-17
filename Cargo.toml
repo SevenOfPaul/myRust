@@ -7,3 +7,5 @@ edition = "2021"
 
 [dependencies]
 newlib={path="./src/newlib"}
+rand="0.8"
+rust-crypto="*"
