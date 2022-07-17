@@ -517,3 +517,20 @@ let s3=s1+s&2
 ## 包模块管理 ##
 1. Package 项目/工程
 2. Crate  包/模块
+3. rust 模块默认的成员都是私有的
+   + 声明包成员
+```rust
+mod factory{
+  // pub(crate) 公开关键字
+    pub(crate) mod produce_refrigerator{
+        pub(crate) fn produce_re(){
+            println!("冰箱");
+        }
+    }
+    pub(crate) mod produce_washing_machine{
+        pub(crate) fn produce_re(){
+            println!("洗衣机");
+        }
+    }
+}
+ ```

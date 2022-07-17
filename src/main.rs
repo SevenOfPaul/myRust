@@ -1,17 +1,6 @@
-mod factory{
-    mod produce_refrigerator{
-        fn produce_re(){
-            println!("冰箱");
-        }
-    }
-    mod produce_washing_machine{
-        fn produce_re(){
-            println!("洗衣机");
-        }
-    }
-}
+use newlib::factory as F;
 fn main() {
-
-//迭代器创建
+    F::produce_refrigerator::produce_re();
+    F::produce_washing_machine::produce_re();
+   println!("main");
    }
-   
