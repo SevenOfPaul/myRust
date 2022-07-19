@@ -3,7 +3,7 @@ enum conText{
     Float(f32),
     Int(i8)
 }
-use std::collections::HashMap;
+use std::{collections::HashMap, string, i8};
 fn main() {
     let mut v:Vec<i32>=Vec::new();
     let mut _v2 = vec![1, 2, 3];
@@ -54,9 +54,21 @@ loop {
    for c in s4.chars(){
     println!("c={}",c)
    }
+   //hashMap
    let mut scores:HashMap<String,i32>=HashMap::new();
    scores.insert("blue".to_string(), 10);
    scores.insert("green".to_string(), 12);
+   println!("{:?}",scores.get("blue"));
+   scores.entry("node".to_string()).or_insert(3);
+   let keys=vec![String::from("blue"),String::from("red")];
+   let values=vec![10,20];
+   let scores2:HashMap<_,_>=keys.iter().zip(values.iter()).collect();
+   if let Some(v)=scores2.get(&keys[0]){
+    println!("{:?}",v);
+   }
+   for(key ,value) in &scores2{
+    print!("{}{}",key,value)
+   }
 //迭代器创建
    }
    

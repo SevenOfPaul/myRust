@@ -431,9 +431,35 @@ match target {
    if let Some(i) = &_v2.get(0){
     println!("{:?}",i)
   }
-}
 ```
  ##  vector与String和HashMap ##
+ 1. 声明 hashMap
+ ```rust
+ let mut scores:HashMap<String,i32>=HashMap::new();
+ //插入
+  scores.insert("blue".to_string(), 10);
+  //取值
+  scores.get("blue")
+  //确认是否有blue 没有的话再插入
+  scores.entry("blue".to_string()).or_insert(3)
+  ```
+2. 数组遍历声明
+```rust
+   let keys=vec![String::from("blue"),String::from("red")];
+   let values=vec![10,20];
+   let scores2:HashMap<_,_>=keys.iter().zip(values.iter()).collect();
+   //into_iter 方法将列表转为迭代器，接着通过 collect 进行收集，不过需要注意的是，collect 方法在内部实际上支持生成多种类型的目标集合，
+   //因为我们需要通过类型标注 HashMap<_,_> 来告诉编译器：请帮我们收集为 HashMap 集合类型，具体的 KV 类型，麻烦编译器您老人家帮我们推导。
+ ```
+3. 获取值
+```rust
+ if let Some(v)=scores2.get(&keys[0]){
+    println!("{:?}",v);
+   }
+let item=String::from("blue")
+scores.get(&item);
+scores[&item]
+ ```
   ### vector ###
  1. vector是动态数组
 ```rust
@@ -514,5 +540,47 @@ let s3=s1+s&2
 ```
  ### hashMap ###
 1. Rust 中哈希类型（哈希映射）为 HashMap<K,V>
+2. 
 ## 包模块管理 ##
-1. 
+1. Package 项目/工程
+2. Crate  包/模块
+3. rust 模块默认的成员都是私有的
+   + 声明包成员
+```rust
+mod factory{
+  // pub(crate) 公开关键字
+    pub(crate) mod produce_refrigerator{
+        pub(crate) fn produce_re(){
+            println!("冰箱");
+        }
+    }
+    pub(crate) mod produce_washing_machine{
+        pub(crate) fn produce_re(){
+            println!("洗衣机");
+        }
+    }
+}
+ ```
+### 自定义包 ###
+1. `cargo new libName --lib`
+2. 在lib下的src也可以创建其他rs文件
+3. 但是必须在lib.rs下暴露
+### 引入第三方包 ###
+1. 在toml中写入需要的第三方包
+```toml
+rand="0.8"
+rust-crypto="*"
+```
+2. 在编译时编译器会自动下载
+### 小技巧 ### 
+1.as设置别名 `use std::io::Result as IoResult;`
+2.{}引入多个 `use std::{cmp::Ordering, io};`
+3.* 全部引入 `use std::collections::*;`
+4. self `use self::xxx，表示加载当前模块中的 xxx。此时 self 可省略`
+   +  `use xxx::{self, yyy}，表示，加载当前路径下模块 xxx 本身，以及模块 xxx 下的 yyy`
+### 限制可见性语法 ###
+1. pub 意味着可见性无任何限制
+2. pub(crate) 表示在当前包可见
+3. pub(self) 在当前模块可见
+4. pub(super) 在父模块可见
+5. pub(in <path>) 表示在某个路径代表的模块中可见，其中 path 必须是父模块或者祖先模块
