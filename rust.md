@@ -431,9 +431,35 @@ match target {
    if let Some(i) = &_v2.get(0){
     println!("{:?}",i)
   }
-}
 ```
  ##  vector与String和HashMap ##
+ 1. 声明 hashMap
+ ```rust
+ let mut scores:HashMap<String,i32>=HashMap::new();
+ //插入
+  scores.insert("blue".to_string(), 10);
+  //取值
+  scores.get("blue")
+  //确认是否有blue 没有的话再插入
+  scores.entry("blue".to_string()).or_insert(3)
+  ```
+2. 数组遍历声明
+```rust
+   let keys=vec![String::from("blue"),String::from("red")];
+   let values=vec![10,20];
+   let scores2:HashMap<_,_>=keys.iter().zip(values.iter()).collect();
+   //into_iter 方法将列表转为迭代器，接着通过 collect 进行收集，不过需要注意的是，collect 方法在内部实际上支持生成多种类型的目标集合，
+   //因为我们需要通过类型标注 HashMap<_,_> 来告诉编译器：请帮我们收集为 HashMap 集合类型，具体的 KV 类型，麻烦编译器您老人家帮我们推导。
+ ```
+3. 获取值
+```rust
+ if let Some(v)=scores2.get(&keys[0]){
+    println!("{:?}",v);
+   }
+let item=String::from("blue")
+scores.get(&item);
+scores[&item]
+ ```
   ### vector ###
  1. vector是动态数组
 ```rust
@@ -514,6 +540,7 @@ let s3=s1+s&2
 ```
  ### hashMap ###
 1. Rust 中哈希类型（哈希映射）为 HashMap<K,V>
+2. 
 ## 包模块管理 ##
 1. Package 项目/工程
 2. Crate  包/模块
