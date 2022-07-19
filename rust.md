@@ -534,3 +534,26 @@ mod factory{
     }
 }
  ```
+### 自定义包 ###
+1. `cargo new libName --lib`
+2. 在lib下的src也可以创建其他rs文件
+3. 但是必须在lib.rs下暴露
+### 引入第三方包 ###
+1. 在toml中写入需要的第三方包
+```toml
+rand="0.8"
+rust-crypto="*"
+```
+2. 在编译时编译器会自动下载
+### 小技巧 ### 
+1.as设置别名 `use std::io::Result as IoResult;`
+2.{}引入多个 `use std::{cmp::Ordering, io};`
+3.* 全部引入 `use std::collections::*;`
+4. self `use self::xxx，表示加载当前模块中的 xxx。此时 self 可省略`
+   +  `use xxx::{self, yyy}，表示，加载当前路径下模块 xxx 本身，以及模块 xxx 下的 yyy`
+### 限制可见性语法 ###
+1. pub 意味着可见性无任何限制
+2. pub(crate) 表示在当前包可见
+3. pub(self) 在当前模块可见
+4. pub(super) 在父模块可见
+5. pub(in <path>) 表示在某个路径代表的模块中可见，其中 path 必须是父模块或者祖先模块
