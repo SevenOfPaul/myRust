@@ -588,7 +588,64 @@ rust-crypto="*"
 ### 可恢复错误 ###
 1. 通常用于从系统全局角度来看可以接受的错误，例如处理用户的访问、操作等错误
 2. 这些错误只会影响某个用户自身的操作进程，而不会对系统的全局稳定性产生影响
-3. 
 ### 不可恢复错误 ###
 1. 该错误通常是全局性或者系统性的错误，例如数组越界访问，系统启动时发生了影响启动流程的错误等等，
 2. 这些错误的影响往往对于系统来说是致命的
+### 手动处理 ###
+1. 分类处理
+```rust
+ let mut file = File::open("../test.txt");
+    let mut content = String::new();
+    match file{
+        Ok(mut file) => file.read_to_string(&mut content).unwrap(),
+        Err(_) =>panic!("出错了")
+    };
+ ```
+2. ?
+```rust
+fn read_username_from_file() -> Result<String, io::Error> {
+    let mut f = File::open("hello.txt")?;
+    let mut s = String::new();
+    f.read_to_string(&mut s)?;
+    Ok(s)
+}
+ ```
+3.在不需要处理错误的场景
+```rust
+use std::fs::File;
+
+fn main() {
+    let f = File::open("hello.txt").unwrap();
+}
+//或
+fn main() {
+    let f = File::open("hello.txt").expect("Failed to open hello.txt");
+}
+ ```
+### 传播错误 ###
+1.
+```rust
+use std::fs::File;
+use std::io::{self, Read};
+
+fn read_username_from_file() -> Result<String, io::Error> {
+    let f = File::open("hello.txt");
+    let mut f = match f {
+        Ok(file) => file,
+        Err(e) => return Err(e),
+    };
+    let mut s = String::new();
+    match f.read_to_string(&mut s) {
+        Ok(_) => Ok(s),
+        Err(e) => Err(e),
+    }
+}
+ ```
+2. main函数中的?处理错误
+```rust
+fn main() -> Result<(), Box<dyn Error>> {
+    let f = File::open("hello.txt")?;
+
+    Ok(())
+}
+ ```
