@@ -649,3 +649,35 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
  ```
+ ## 泛型 ## 
+### 函数中泛型 ###
+```rust
+fn largest<T:std::cmp::PartialOrd>(list:&[T])->&T{
+    let mut largest = &list[0];
+    for item in list.iter() {
+        if &item > &largest {
+           largest = &item;
+        }
+    }
+    &largest
+
+}
+fn main(){
+    let a_list=vec![1,2,4,7,8,7,11,4,1];
+     println!("{:?}",largest(&a_list));
+}
+ ```
+ ### 结构体中泛型 ###
+```rust
+  struct Person<T>{
+    name:T,
+    age:i32,
+    addr:T
+}
+ let p=Person{
+    name:String::from("张思"),
+    age:12,
+    addr:String::from("黑龙江")
+   };
+  println!("{:?}",p);
+ ```
