@@ -1,72 +1,31 @@
-fn largest<T:std::cmp::PartialOrd>(list:&[T])->&T{
-    let mut largest = &list[0];
-    for item in list.iter() {
-        if &item > &largest {
-           largest = &item;
-        }
-    }
-    &largest
-
+trait ShoolName {
+    fn get_school_name(&self)->String;
+    
 }
-#[derive(Debug)]
-  struct Person<T,G>{
-    name:T,
-    age:G,
-    addr:T
+pub struct Post {
+  pub title: String, // 标题
+  pub author: String, // 作者
+  pub content: String, // 内容
 }
-struct Person2<H,L>{
-  name:H,
-  age:L,
-  addr:H
+pub struct Weibo {
+  pub username: String,
+  pub content: String
 }
-impl<T, G> Person<T,G>{
-
-fn getName(&self)->&T{
-    &(&self.name)
+impl ShoolName for Weibo {
+  fn get_school_name(&self) -> String {
+      format!("{}发表了微博{}", self.username, self.content)
+  }
 }
-fn getAge(&self)->&G{
-  &(&self.age)
-}
-fn getNewPerson<H,L>(self,other:Person2<H,L>)->Person<T,L>{
-    let person=Person{
-      name:self.name,
-      age:other.age,
-      addr:self.addr
-    };
-    return person;
-}
-}
-
-enum People<T>{
-  Name(T),
-  Age(i32),
-}
-#[derive(Debug)]
-  struct Point<T>{
-   x:T,
-   y:T
+impl ShoolName for Post {
+  fn get_school_name(&self) -> String {
+      format!("文章{}, 作者是{}", self.title, self.author)
+  }
 }
 fn main(){
-    let a_list=vec![1,2,4,7,8,7,11,4,1];
-    let b_list=vec!['a','c','d','r','f','k'];
-   let p=Person{
-    name:String::from("张思"),
-    age:12,
-    addr:String::from("黑龙江")
-   };
-   let name=People::Name("张思舞".to_string());
-   let age=People::Age::<i32>(7);
-   if let People::Name(n)=name{
-        print!("{}", n);
-   }
-   if let People::Age(n)=age{
-    println!("{}", n);
-}
- 
- let number=Point{x:1,y:2};
-    println!("{},{}", p.getName(),p.getAge());
-     println!("{:?}",largest(&a_list));
-     println!("{:?}",largest(&b_list));
-     println!("{:?}",p);
-     println!("{:?}",&number);
+  let p=Post{
+    title:String::from("标题"),
+    author:String::from("张思"),
+    content:String::from("真好")
+  };
+  println!("{}",p.get_school_name());
 }
