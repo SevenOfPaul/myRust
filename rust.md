@@ -697,3 +697,46 @@ enum People<T>{
 }
  ```
   ### 方法中泛型 ###
+  1. impl指定方法时必须加上泛型
+```rust
+#[derive(Debug)]
+  struct Person<T,G>{
+    name:T,
+    age:G,
+    addr:T
+}
+impl<T, G> Person<T,G>{
+
+fn getName(&self)->&T{
+    &(&self.name)
+}
+fn getAge(&self)->&G{
+  &(&self.age)
+}
+}
+impl<T, G> Person<T,G>{
+
+fn getName(&self)->&T{
+    &(&self.name)
+}
+fn getAge(&self)->&G{
+  &(&self.age)
+}
+fn getNewPerson<H,L>(self,other:Person2<H,L>)->Person<T,L>{
+    let person=Person{
+      name:self.name,
+      age:other.age,
+      addr:self.addr
+    };
+    return person;
+}
+}
+ ```
+ 2. 针对特定泛型实现方法
+```rust
+impl Point<f32> {
+    fn distance_from_origin(&self) -> f32 {
+        (self.x.powi(2) + self.y.powi(2)).sqrt()
+    }
+}
+ ```

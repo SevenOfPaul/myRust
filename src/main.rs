@@ -14,6 +14,11 @@ fn largest<T:std::cmp::PartialOrd>(list:&[T])->&T{
     age:G,
     addr:T
 }
+struct Person2<H,L>{
+  name:H,
+  age:L,
+  addr:H
+}
 impl<T, G> Person<T,G>{
 
 fn getName(&self)->&T{
@@ -21,6 +26,14 @@ fn getName(&self)->&T{
 }
 fn getAge(&self)->&G{
   &(&self.age)
+}
+fn getNewPerson<H,L>(self,other:Person2<H,L>)->Person<T,L>{
+    let person=Person{
+      name:self.name,
+      age:other.age,
+      addr:self.addr
+    };
+    return person;
 }
 }
 
