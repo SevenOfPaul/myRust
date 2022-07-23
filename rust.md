@@ -767,3 +767,5 @@ fn main(){
   println!("{}",p.get_school_name());
 }
 ```
+### Trait作为返回值 ###
+1. 不要用if来返回两个符合trait的类型 编译器无法通过
