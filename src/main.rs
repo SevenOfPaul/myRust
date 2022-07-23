@@ -9,10 +9,24 @@ fn largest<T:std::cmp::PartialOrd>(list:&[T])->&T{
 
 }
 #[derive(Debug)]
-  struct Person<T>{
+  struct Person<T,G>{
     name:T,
-    age:i32,
+    age:G,
     addr:T
+}
+impl<T, G> Person<T,G>{
+
+fn getName(&self)->&T{
+    &(&self.name)
+}
+fn getAge(&self)->&G{
+  &(&self.age)
+}
+}
+
+enum People<T>{
+  Name(T),
+  Age(i32),
 }
 #[derive(Debug)]
   struct Point<T>{
@@ -27,7 +41,17 @@ fn main(){
     age:12,
     addr:String::from("黑龙江")
    };
+   let name=People::Name("张思舞".to_string());
+   let age=People::Age::<i32>(7);
+   if let People::Name(n)=name{
+        print!("{}", n);
+   }
+   if let People::Age(n)=age{
+    println!("{}", n);
+}
+ 
  let number=Point{x:1,y:2};
+    println!("{},{}", p.getName(),p.getAge());
      println!("{:?}",largest(&a_list));
      println!("{:?}",largest(&b_list));
      println!("{:?}",p);

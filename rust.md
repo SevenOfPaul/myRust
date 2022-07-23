@@ -681,3 +681,19 @@ fn main(){
    };
   println!("{:?}",p);
  ```
+   ### 枚举中泛型 ###
+```rust
+enum People<T>{
+  Name(T),
+  Age(i32),
+}
+ let name=People::Name(("张思舞".to_string()));
+   let age=People::Age::<i32>(7);
+   if let People::Name(n)=name{
+        print!("{}", n);
+   }
+   if let People::Age(n)=age{
+    println!("{}", n);
+}
+ ```
+  ### 方法中泛型 ###
