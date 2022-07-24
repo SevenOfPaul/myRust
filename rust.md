@@ -810,4 +810,20 @@ pub struct Post {
 }
 let _t=return_school(&p); 
  ```
- #### 有条件的返回Trait_bound ####
+ #### 有条件的实现Trait_bound ####
+```rust
+use std::fmt::Display;
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+impl<T: Display + PartialOrd> Pair<T> {
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("The largest member is x = {}", self.x);
+        } else {
+            println!("The largest member is y = {}", self.y);
+        }
+    }
+}
+```

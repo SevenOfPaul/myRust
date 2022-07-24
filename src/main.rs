@@ -26,20 +26,6 @@ impl ShoolName for Post {
 fn return_school<T:ShoolName>(obj:&T)->&impl ShoolName{
   return obj.clone()
 }
-fn return_Personl<T:ShoolName>(obj:&T)->&impl ShoolName{
-  if true{
-    return Post{
-      title:String::from("标题"),
-      author:String::from("张思"),
-      content:String::from("真好")
-    };
-  }else{
-    return Weibo{
-      username:String::from("张思"),
-      content:String::from("真好")
-    }
-  }
-}
 trait  GetName {
     fn GetName(&self)->&String;
 }
