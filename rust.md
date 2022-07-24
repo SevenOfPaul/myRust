@@ -741,7 +741,9 @@ impl Point<f32> {
 }
  ```
 ## Trait 特征 ##
-1. Trait类似其它语言的接口
+1. Trait类似其它语言的接口 可以定以共享的行为
+2. Trait只能定义行为(方法)
+3. trait_bound相当于extend
 ## 实现 ##
 ```rust
 trait ShoolName {
@@ -767,5 +769,45 @@ fn main(){
   println!("{}",p.get_school_name());
 }
 ```
+### Trait_bound ###
+1. 相当于ts的extends
+2. where写法
+```rust
+ fn printPerson<T>(person:&T)
+ where T:GetName+GetAge
+ {
+    println!("{}",person.GetName());
+    println!("{}",person.GetAge());
+   }
+```
+3. 标准写法
+```rust
+ fn printPerson<T:GetName+GetAge>(person:&T){
+    println!("{}",person.GetName());
+    println!("{}",person.GetAge());
+   }
+``` 
 ### Trait作为返回值 ###
 1. 不要用if来返回两个符合trait的类型 编译器无法通过
+```rust
+trait ShoolName {
+    fn get_school_name(&self)->String;
+    
+}
+#[derive(Debug)]
+pub struct Post {
+  pub title: String, // 标题
+  pub author: String, // 作者
+  pub content: String, // 内容
+}
+ let p=Post{
+    title:String::from("标题"),
+    author:String::from("张思"),
+    content:String::from("真好")
+  };
+  fn return_school<T:ShoolName>(obj:&T)->&impl ShoolName{
+  return obj.clone()
+}
+let _t=return_school(&p); 
+ ```
+ #### 有条件的返回Trait_bound ####

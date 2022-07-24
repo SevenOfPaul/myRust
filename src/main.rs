@@ -2,6 +2,7 @@ trait ShoolName {
     fn get_school_name(&self)->String;
     
 }
+#[derive(Debug)]
 pub struct Post {
   pub title: String, // 标题
   pub author: String, // 作者
@@ -12,7 +13,6 @@ pub struct Weibo {
   pub username: String,
   pub content: String
 }
-
 impl ShoolName for Weibo {
   fn get_school_name(&self) -> String {
       format!("{}发表了微博{}", self.username, self.content)
@@ -23,11 +23,48 @@ impl ShoolName for Post {
       format!("文章{}, 作者是{}", self.title, self.author)
   }
 }
-fn return_school()->impl ShoolName{
-  return Weibo{
-    username:String::from("高"),
-    content:String::from("")
+fn return_school<T:ShoolName>(obj:&T)->&impl ShoolName{
+  return obj.clone()
+}
+fn return_Personl<T:ShoolName>(obj:&T)->&impl ShoolName{
+  if true{
+    return Post{
+      title:String::from("标题"),
+      author:String::from("张思"),
+      content:String::from("真好")
+    };
+  }else{
+    return Weibo{
+      username:String::from("张思"),
+      content:String::from("真好")
+    }
   }
+}
+trait  GetName {
+    fn GetName(&self)->&String;
+}
+trait  GetAge {
+  fn GetAge(&self)->&i32;
+}
+struct  Person{
+  name:String,
+  age:i32
+}
+impl GetName for Person{
+  fn GetName(&self)->&String {
+      return &self.name;
+  }
+}
+impl GetAge for Person{
+  fn GetAge(&self)->&i32 {
+      return &self.age;
+  }
+}
+impl Person{
+  fn printPerson<T:GetName+GetAge>(person:&T){
+    println!("{}",person.GetName());
+    println!("{}",person.GetAge());
+   }
 }
 fn main(){
   let p=Post{
@@ -35,9 +72,8 @@ fn main(){
     author:String::from("张思"),
     content:String::from("真好")
   };
-//  let t=return_school() as String;
-// if let Weibo(t)=t{
-//  println!("{}",username)
-// }
-  println!("{}",p.get_school_name());
+  
+ let _t=return_school(&p); 
+let person=Person{name:"找i".to_string(),age:12};
+    Person::printPerson(&person);
 }
