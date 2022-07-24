@@ -1,6 +1,8 @@
 trait ShoolName {
-    fn get_school_name(&self)->String;
-    
+    fn get_school_name(&self)->String; 
+}
+trait  PrintName {
+    fn print_name(&self);
 }
 #[derive(Debug)]
 pub struct Post {
@@ -51,6 +53,11 @@ impl Person{
     println!("{}",person.GetName());
     println!("{}",person.GetAge());
    }
+}
+impl<T:GetName> PrintName for T{
+ fn print_name(&self){
+  println!("{}",self.GetName())
+ }
 }
 fn main(){
   let p=Post{
