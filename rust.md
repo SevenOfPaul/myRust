@@ -811,6 +811,7 @@ pub struct Post {
 let _t=return_school(&p); 
  ```
  #### 有条件的实现Trait_bound ####
+ 1.只有符合Trait的才会添加方法
 ```rust
 use std::fmt::Display;
 struct Pair<T> {
@@ -825,5 +826,25 @@ impl<T: Display + PartialOrd> Pair<T> {
             println!("The largest member is y = {}", self.y);
         }
     }
+}
+```
+```rust
+impl<T:GetName> PrintName for T{
+ fn print_name(&self){
+  println!("{}",self.GetName())
+ }
+}
+```
+2. 为不同特征重载
+```rust
+struct Person{
+  master:T,
+  student:U
+}
+impl<T:GetName+GetAge,U:getName> Person<T,U>{
+  fn print(&self){
+    println!("{}",self.master.get_name())
+    println!("{}",self.student.get_name())
+  }
 }
 ```
