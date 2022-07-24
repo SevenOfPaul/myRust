@@ -697,3 +697,154 @@ enum People<T>{
 }
  ```
   ### 方法中泛型 ###
+  1. impl指定方法时必须加上泛型
+```rust
+#[derive(Debug)]
+  struct Person<T,G>{
+    name:T,
+    age:G,
+    addr:T
+}
+impl<T, G> Person<T,G>{
+
+fn getName(&self)->&T{
+    &(&self.name)
+}
+fn getAge(&self)->&G{
+  &(&self.age)
+}
+}
+impl<T, G> Person<T,G>{
+
+fn getName(&self)->&T{
+    &(&self.name)
+}
+fn getAge(&self)->&G{
+  &(&self.age)
+}
+fn getNewPerson<H,L>(self,other:Person2<H,L>)->Person<T,L>{
+    let person=Person{
+      name:self.name,
+      age:other.age,
+      addr:self.addr
+    };
+    return person;
+}
+}
+ ```
+ 2. 针对特定泛型实现方法
+```rust
+impl Point<f32> {
+    fn distance_from_origin(&self) -> f32 {
+        (self.x.powi(2) + self.y.powi(2)).sqrt()
+    }
+}
+ ```
+## Trait 特征 ##
+1. Trait类似其它语言的接口 可以定以共享的行为
+2. Trait只能定义行为(方法)
+3. trait_bound相当于extend
+## 实现 ##
+```rust
+trait ShoolName {
+    fn get_school_name(&self)->String;
+    
+}
+pub struct Post {
+  pub title: String, // 标题
+  pub author: String, // 作者
+  pub content: String, // 内容
+}
+impl ShoolName for Weibo {
+  fn get_school_name(&self) -> String {
+      format!("{}发表了微博{}", self.username, self.content)
+  }
+}
+fn main(){
+  let p=Post{
+    title:String::from("标题"),
+    author:String::from("张思"),
+    content:String::from("真好")
+  };
+  println!("{}",p.get_school_name());
+}
+```
+### Trait_bound ###
+1. 相当于ts的extends
+2. where写法
+```rust
+ fn printPerson<T>(person:&T)
+ where T:GetName+GetAge
+ {
+    println!("{}",person.GetName());
+    println!("{}",person.GetAge());
+   }
+```
+3. 标准写法
+```rust
+ fn printPerson<T:GetName+GetAge>(person:&T){
+    println!("{}",person.GetName());
+    println!("{}",person.GetAge());
+   }
+``` 
+### Trait作为返回值 ###
+1. 不要用if来返回两个符合trait的类型 编译器无法通过
+```rust
+trait ShoolName {
+    fn get_school_name(&self)->String;
+    
+}
+#[derive(Debug)]
+pub struct Post {
+  pub title: String, // 标题
+  pub author: String, // 作者
+  pub content: String, // 内容
+}
+ let p=Post{
+    title:String::from("标题"),
+    author:String::from("张思"),
+    content:String::from("真好")
+  };
+  fn return_school<T:ShoolName>(obj:&T)->&impl ShoolName{
+  return obj.clone()
+}
+let _t=return_school(&p); 
+ ```
+ #### 有条件的实现Trait_bound ####
+ 1.只有符合Trait的才会添加方法
+```rust
+use std::fmt::Display;
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+impl<T: Display + PartialOrd> Pair<T> {
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("The largest member is x = {}", self.x);
+        } else {
+            println!("The largest member is y = {}", self.y);
+        }
+    }
+}
+```
+```rust
+impl<T:GetName> PrintName for T{
+ fn print_name(&self){
+  println!("{}",self.GetName())
+ }
+}
+```
+2. 为不同特征重载
+```rust
+struct Person{
+  master:T,
+  student:U
+}
+impl<T:GetName+GetAge,U:getName> Person<T,U>{
+  fn print(&self){
+    println!("{}",self.master.get_name())
+    println!("{}",self.student.get_name())
+  }
+}
+```
