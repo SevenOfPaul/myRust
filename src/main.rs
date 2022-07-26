@@ -1,18 +1,29 @@
-use std::time::{ Instant};
-
-
-fn main(){
- let sy_time=Instant::now();
- let mut arr:[i8;7]=[1,2,54,78,8,9,10];
- for _i in 0..arr.len()-1 {
-    for j in 0..arr.len()-1{
-       if arr.get(j)>arr.get(j+1){
-        let temp=arr[j];
-         arr[j]=arr[j+1];
-         arr[j+1]=temp;
-       }
+use std::{time::Instant, string};
+fn longest <'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x  
+    } else {
+        y
     }
+}
+#[derive(Debug)]
+struct A<'a>{
+    name:&'a String
+}
+impl<'a> A<'a>{
+ fn do_some(&self,s:&'a str)->&'a str{
+      s
  }
- println!("{:?}",arr);
- println!("{:?}",sy_time.elapsed());
+}
+fn main(){
+    let now = Instant::now();
+    let s: &'static str = "我没啥优点，就是活得久，嘿嘿";
+let r;
+{
+    r=s;
+};
+let n=String::from("hello");
+let a=A{name:&n};
+println!("{:?}",longest("你好啊","不好"));
+ println!("{:?},{:?}", now.elapsed(),a);
 }
