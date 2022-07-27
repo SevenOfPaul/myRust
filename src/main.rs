@@ -25,5 +25,5 @@ let r;
 let n=String::from("hello");
 let a=A{name:&n};
 println!("{:?}",longest("你好啊","不好"));
- println!("{:?},{:?}", now.elapsed(),a);
+ println!("{:?},{:p}", now.elapsed(),n.as_ptr());
 }
