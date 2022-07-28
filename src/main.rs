@@ -1,29 +1,41 @@
-use std::{time::Instant, string};
-fn longest <'a>(x: &'a str, y: &'a str) -> &'a str {
-    if x.len() > y.len() {
-        x  
-    } else {
-        y
-    }
-}
-#[derive(Debug)]
-struct A<'a>{
-    name:&'a String
-}
-impl<'a> A<'a>{
- fn do_some(&self,s:&'a str)->&'a str{
-      s
- }
-}
-fn main(){
-    let now = Instant::now();
-    let s: &'static str = "我没啥优点，就是活得久，嘿嘿";
-let r;
+// struct Cacher<T:Fn(u32)->u32>{
+// calcuation:T,
+// value:u32,
+// }
+// impl<T> Cacher<T:Fn(u32)->u32>{
+//     fn new(calcuation:T)->Cacher<T>{
+        
+//     }
+// }
+fn fn_once<F>(func: F)
+where
+    F: FnOnce(usize) -> bool+Copy,
 {
-    r=s;
+    println!("{}？", func(3));
+    println!("{}？", func(4));
+}
+fn fn_mut<F>(func: F)
+where
+    F: FnMut(usize) -> bool,
+{
+    println!("{}？", func(3));
+    println!("{}？", func(4));
+}
+
+fn main(){
+let use_closure=|n:i32|->i32{
+    // println!("this is closure");
+    return n
 };
-let n=String::from("hello");
-let a=A{name:&n};
-println!("{:?}",longest("你好啊","不好"));
- println!("{:?},{:p}", now.elapsed(),n.as_ptr());
+
+let closure2=|n:i32|{n+1};
+let closure3=|n|n+1;
+let v=closure3(7);
+fn add(n:u8)->u8{
+    n+1
+}
+let h = vec![1, 2, 3];
+fn_once(|z|z==h.len());
+println!("闭包{}",use_closure(6));
+println!("{}",add(6));
 }
