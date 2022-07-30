@@ -1,41 +1,48 @@
-// struct Cacher<T:Fn(u32)->u32>{
-// calcuation:T,
-// value:u32,
-// }
-// impl<T> Cacher<T:Fn(u32)->u32>{
-//     fn new(calcuation:T)->Cacher<T>{
-        
-//     }
-// }
-fn fn_once<F>(func: F)
-where
-    F: FnOnce(usize) -> bool+Copy,
-{
-    println!("{}？", func(3));
-    println!("{}？", func(4));
+struct Counter {
+    count: i32,
 }
-fn fn_mut<F>(func: F)
-where
-    F: FnMut(usize) -> bool,
-{
-    println!("{}？", func(3));
-    println!("{}？", func(4));
+impl Counter {
+    fn new() -> Counter {
+        Counter { count: 0 }
+    }
 }
-
-fn main(){
-let use_closure=|n:i32|->i32{
-    // println!("this is closure");
-    return n
-};
-
-let closure2=|n:i32|{n+1};
-let closure3=|n|n+1;
-let v=closure3(7);
-fn add(n:u8)->u8{
-    n+1
+impl Iterator for Counter {
+    type Item = i32;
+    fn next(&mut self) -> Option<Self::Item> {
+        self.count += 1;
+        if self.count < 6 {
+            Some(self.count)
+        } else {
+            None
+        }
+    }
 }
-let h = vec![1, 2, 3];
-fn_once(|z|z==h.len());
-println!("闭包{}",use_closure(6));
-println!("{}",add(6));
+fn main() {
+    let v1 = vec![1, 2, 3];
+    let mut v1_iter = v1.iter();
+    match v1_iter.next() {
+        Some(v) => println!("{}", v),
+        None => todo!(),
+    }
+    match v1_iter.next() {
+        Some(v) => println!("{}", v),
+        None => todo!(),
+    }
+    match v1_iter.next() {
+        Some(v) => println!("{}", v),
+        None => todo!(),
+    }
+    let total: i32 = v1.iter().sum();
+    let v2: Vec<_> = v1.iter().map(|x| x).collect();
+    let mut counter=Counter::new();
+    for i in (0..6)  {
+        if let Some(v)=counter.next(){
+            println!("{:?}",v);
+        }else{
+            println!("结束了")
+        }
+    }
+    println!("{:?}", total);
+    println!("{:?}", v2);
+    println!("hello world");
 }
