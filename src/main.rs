@@ -17,7 +17,31 @@ impl Iterator for Counter {
         }
     }
 }
+#[derive(Debug)]
+struct NumberArray<'a> {
+    count: &'a [i32],
+    index:i32
+}
+impl NumberArray<'_>{
+ fn new(arr:[i32;5])->NumberArray<'static>{
+   let mut result=&arr[0..arr.len()-1];
+   NumberArray{count:result,index:0}
+ }
+}
+impl Iterator for NumberArray<'_>{
+    type Item = i32;
+    fn next(&mut self)->Option<Self::Item>{
+        self.index += 1;
+        let index=self.index;
+         if self.index<=self.count.len() as i32 {
+          return self
+         }else{
+            return None;
+         }
+    }
+}
 fn main() {
+    ///声明动态数组
     let v1 = vec![1, 2, 3];
     let mut v1_iter = v1.iter();
     match v1_iter.next() {
@@ -45,4 +69,9 @@ fn main() {
     println!("{:?}", total);
     println!("{:?}", v2);
     println!("hello world");
+    let na=NumberArray::new([1,2,3,4,5].to_owned());
+    println!("数组{:?}",&na);
+    for n in na{
+        println!("数组{:?}",n);
+    }
 }
