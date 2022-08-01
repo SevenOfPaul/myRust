@@ -30,11 +30,11 @@ impl NumberArray<'_>{
 }
 impl Iterator for NumberArray<'_>{
     type Item = i32;
-    fn next(&mut self)->Option<Self::Item>{
+    fn next(&mut self)->Option<Self::Item >{
         self.index += 1;
         let index=self.index;
          if self.index<=self.count.len() as i32 {
-          return self
+          return self.count.get(self.index).as_deref()
          }else{
             return None;
          }
