@@ -17,37 +17,17 @@ impl Iterator for Counter {
         }
     }
 }
-#[derive(Debug)]
-struct NumberArray<'a> {
-    count: &'a [i32],
-    index:i32
-}
-impl NumberArray<'_>{
- fn new(arr:[i32;5])->NumberArray<'static>{
-   let mut result=&arr[0..arr.len()-1];
-   NumberArray{count:result,index:0}
- }
-}
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-impl Iterator for NumberArray<'_>{
-    type Item = i32;
-    fn next(&mut self)->Option<Self::Item>{
-=======
-impl<'a> Iterator for NumberArray<'_>{
-    type Item = &'a[i32];
-    fn next(&mut self)->Option<Self::Item >{
->>>>>>> 2022-8-01
-        self.index += 1;
-        let index=self.index;
-         if self.index<=self.count.len() as i32 {
-          return Some(self.count.clone())
-         }else{
-            return None;
-         }
-    }
-}
-=======
+// #[derive(Debug)]
+// struct NumberArray<'a> {
+//     count: &'a [i32],
+//     index:i32
+// }
+// impl NumberArray<'_>{
+//  fn new(arr:[i32;5])->NumberArray<'static>{
+//    let mut result=&arr[0..arr.len()-1];
+//    NumberArray{count:result,index:0}
+//  }
+// }
 // impl<'a> Iterator for NumberArray<'_>{
 //     type Item = &'a[i32];
 //     fn next(&mut self)->Option<Self::Item >{
@@ -60,7 +40,6 @@ impl<'a> Iterator for NumberArray<'_>{
 //          }
 //     }
 // }
->>>>>>> Stashed changes
 fn main() {
     ///声明动态数组
     let v1 = vec![1, 2, 3];
@@ -90,20 +69,13 @@ fn main() {
     println!("{:?}", total);
     println!("{:?}", v2);
     println!("hello world");
-    let na=NumberArray::new([1,2,3,4,5].to_owned());
-    println!("数组{:?}",&na);
-<<<<<<< Updated upstream
-    for n in na{
-        println!("数组{:?}",n);
-    }
-<<<<<<< HEAD
-}
-=======
+    // let na=NumberArray::new([1,2,3,4,5].to_owned());
+    // println!("数组{:?}",&na);
     // for n in na{
     //     println!("数组{:?}",n);
     // }
+    let total: i32 = v1_iter.sum();
+    println!("{:?}",total);
+     let total2:Vec<_>=v1.iter().map(|x|x).collect();
+     println!("{:?}",total2);
 }
->>>>>>> Stashed changes
-=======
-}
->>>>>>> 2022-8-01
