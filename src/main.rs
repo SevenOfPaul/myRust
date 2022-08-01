@@ -28,6 +28,7 @@ impl NumberArray<'_>{
    NumberArray{count:result,index:0}
  }
 }
+<<<<<<< Updated upstream
 impl Iterator for NumberArray<'_>{
     type Item = i32;
     fn next(&mut self)->Option<Self::Item>{
@@ -40,6 +41,20 @@ impl Iterator for NumberArray<'_>{
          }
     }
 }
+=======
+// impl<'a> Iterator for NumberArray<'_>{
+//     type Item = &'a[i32];
+//     fn next(&mut self)->Option<Self::Item >{
+//         self.index += 1;
+//         let index=self.index;
+//          if self.index<=self.count.len() as i32 {
+//           return Some(self.count.clone())
+//          }else{
+//             return None;
+//          }
+//     }
+// }
+>>>>>>> Stashed changes
 fn main() {
     ///声明动态数组
     let v1 = vec![1, 2, 3];
@@ -71,7 +86,14 @@ fn main() {
     println!("hello world");
     let na=NumberArray::new([1,2,3,4,5].to_owned());
     println!("数组{:?}",&na);
+<<<<<<< Updated upstream
     for n in na{
         println!("数组{:?}",n);
     }
 }
+=======
+    // for n in na{
+    //     println!("数组{:?}",n);
+    // }
+}
+>>>>>>> Stashed changes
