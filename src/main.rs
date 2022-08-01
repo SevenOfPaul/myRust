@@ -28,14 +28,20 @@ impl NumberArray<'_>{
    NumberArray{count:result,index:0}
  }
 }
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 impl Iterator for NumberArray<'_>{
     type Item = i32;
     fn next(&mut self)->Option<Self::Item>{
+=======
+impl<'a> Iterator for NumberArray<'_>{
+    type Item = &'a[i32];
+    fn next(&mut self)->Option<Self::Item >{
+>>>>>>> 2022-8-01
         self.index += 1;
         let index=self.index;
          if self.index<=self.count.len() as i32 {
-          return self
+          return Some(self.count.clone())
          }else{
             return None;
          }
@@ -90,6 +96,7 @@ fn main() {
     for n in na{
         println!("数组{:?}",n);
     }
+<<<<<<< HEAD
 }
 =======
     // for n in na{
@@ -97,3 +104,6 @@ fn main() {
     // }
 }
 >>>>>>> Stashed changes
+=======
+}
+>>>>>>> 2022-8-01
