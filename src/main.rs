@@ -28,13 +28,13 @@ impl NumberArray<'_>{
    NumberArray{count:result,index:0}
  }
 }
-impl Iterator for NumberArray<'_>{
-    type Item = i32;
+impl<'a> Iterator for NumberArray<'_>{
+    type Item = &'a[i32];
     fn next(&mut self)->Option<Self::Item >{
         self.index += 1;
         let index=self.index;
          if self.index<=self.count.len() as i32 {
-          return self.count.get(self.index).as_deref()
+          return Some(self.count.clone())
          }else{
             return None;
          }
