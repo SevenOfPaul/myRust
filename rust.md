@@ -967,8 +967,44 @@ fn as_x(n:i32)->bool{
    + 闭包捕获变量有三种途径，恰好对应函数参数的三种传入方式：转移所有权、可变借用、不可变借用，因此相应的 Fn 特征也有三种：
    + FnOnce
    + 该类型的闭包会拿走被捕获变量的所有权。Once 顾名思义，说明该闭包只能运行一次
-   ```rust
-  
-   ```
+ ```rust
+ fn fn_once<F>(func:F)
+where
+    F: FnOnce(usize) -> bool+Copy,
+{
+    println!("{}？", func(3));
+    println!("{}？", func(4));
+}
+fn_once(|z|z==h.len());
+```
+   + FnMut
+   + 它以可变借用的方式捕获了环境中的值，因此可以修改该值：
+```rust
+fn fn_mut<F>(mut func2: F)
+where
+    F: FnMut(i32) -> i32,
+{
+    println!("闭包={}？", func2(10));
+    println!("闭包={}？", func2(4));
+}
+fn_mut(|mut z|{
+    let index=h.len() as i32;
+     z=index;
+     z
+});
+ ```
+   + Fn
+   + Fn 特征，它以不可变借用的方式捕获环境中的值
+```rust
+fn fn_no_mut<'a,F: Fn(&'a str)->&str>(func3: F)
+{
+    println!("闭包={}？", func3("你好"));
+    println!("闭包={}？", func3("我不好"));
+}
+fn_no_mut(|mut z|{
+   z="号";
+   z
+});
+```
   ## 迭代器 ##
   ### 创建迭代器 ###
