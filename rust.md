@@ -1053,3 +1053,47 @@ impl Iterator for Counter {
    ```
 5. b存储在栈上 5存储在堆上 b指向5
 ### 解引用 ###
+1. 为 MyBox 实现 Deref 特征，以支持 * 解引用操作符
+2. 在 Deref 特征中声明了关联类型 Target，在之前章节中介绍过，关联类型主要是为了提升代码可读性
+3. deref 返回的是一个常规引用，可以被 * 进行解引用
+### 解引用重载 ###
+```rust
+struct MyBox<T>{
+    value:T
+}
+impl<T> MyBox<T>{
+    fn new(value:T)->MyBox<T>{
+        MyBox { value }
+    }
+}
+//解引用重载
+impl<T> Deref for MyBox<T>{
+    type Target = T;
+    fn deref(&self)->&Self::Target{
+        &&self.value
+    }
+}
+```
+### Drop ###
+1. 析构函数
+```rust
+struct MyBox<T>{
+    value:T
+}
+impl<T> MyBox<T>{
+    fn new(value:T)->MyBox<T>{
+        MyBox { value }
+    }
+}
+impl<T> Deref for MyBox<T>{
+    type Target = T;
+    fn deref(&self)->&Self::Target{
+        &&self.value
+    }
+}
+impl<T> Drop for MyBox<T>{
+    fn drop(&mut self) {
+        println!("对像销毁");
+    }
+}
+```
