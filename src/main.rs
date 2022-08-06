@@ -47,6 +47,7 @@ fn main() {
     let c=*d;
     let e = MyBox::new(10);
     let f=*e;
+    drop(e);
     println!("{:?}&{:?}", b, list);
     println!("{:?}&{:?}", b,c);
     println!("{:?}",f)
