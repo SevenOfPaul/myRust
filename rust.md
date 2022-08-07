@@ -1052,6 +1052,18 @@ impl Iterator for Counter {
      println!("{:?}&",b);
    ```
 5. b存储在栈上 5存储在堆上 b指向5
+```rust
+#[derive(Debug)]
+enum List<T>{
+    Cons(T,Box<List<T>>),
+    Nil,
+}
+use crate::List::{Cons,Nil};
+fn main() {
+ let a=Cons(2,Box::new(Cons(1,Box::new(Nil))));
+}
+
+ ```
 ### 解引用 ###
 1. 为 MyBox 实现 Deref 特征，以支持 * 解引用操作符
 2. 在 Deref 特征中声明了关联类型 Target，在之前章节中介绍过，关联类型主要是为了提升代码可读性
@@ -1098,3 +1110,30 @@ impl<T> Drop for MyBox<T>{
 }
 ```
 ### RC智能指针 ###
+1. 在一份引用需要被多种数据所引用的时候
+2. 当我们希望在堆上分配一个对象供程序的多个部分使用且无法确定哪个部分最后一个结束时，就可以使用 Rc 成为数据值的所有者，
+```rust
+#[derive(Debug)]
+enum List<T>{
+    Cons(T,Rc<List<T>>),
+    Nil,
+}
+use crate::List::{Cons,Nil};
+use std::rc::Rc;
+fn main() {
+
+ let a=Rc::new(Cons(2,Rc::new(Cons(1,Rc::new(Nil)))));
+ let b=Cons(2,Rc::clone(&a));
+ let c=Cons(2,Rc::clone(&a));
+ println!("{:?}",Rc::strong_count(&a));
+}
+
+```
+```rust
+//创建rc智能指针
+Rc::new()
+//复制一份数据创建Rc
+Rc::clone()
+//计算rc引用次数
+Rc::strong_count()
+```
