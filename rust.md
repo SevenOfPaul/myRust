@@ -1137,3 +1137,13 @@ Rc::clone()
 //计算rc引用次数
 Rc::strong_count()
 ```
+### RefCell与Cell  ###
+1.RefCell与Cell可以用来修改不可变借用内部的值
+```rust
+let a=RefCell::new(5);
+*a.borrow_mut()+=10;
+println!("{:?}",&a);//15
+```
+2. Cell 和 RefCell 在功能上没有区别，区别在于 Cell<T> 适用于 T 实现 Copy 的情况
+3. Cell 只适用于 Copy 类型，用于提供值，而 RefCell 用于提供引用
+4. Cell 不会 panic，而 RefCell 会
