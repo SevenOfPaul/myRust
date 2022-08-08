@@ -1147,3 +1147,13 @@ println!("{:?}",&a);//15
 2. Cell 和 RefCell 在功能上没有区别，区别在于 Cell<T> 适用于 T 实现 Copy 的情况
 3. Cell 只适用于 Copy 类型，用于提供值，而 RefCell 用于提供引用
 4. Cell 不会 panic，而 RefCell 会
+```rust
+fn main() {
+    let value=Rc::new(RefCell::new(5));
+    let a=Rc::new(Cons(Rc::clone(&value), Rc::new(Nil)));
+    let b=Cons(Rc::new(RefCell::new(5)),Rc::clone(&a));
+    let c=Cons(Rc::new(RefCell::new(6)),Rc::clone(&a));
+    *value.borrow_mut()+=10;
+    println!("{:?}**{:?}",&value,&b);
+}
+```
