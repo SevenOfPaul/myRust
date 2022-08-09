@@ -1157,3 +1157,5 @@ fn main() {
     println!("{:?}**{:?}",&value,&b);
 }
 ```
+## 多线程 ## 
+1.thread::sleep sleep函数 Duration::from_millis(i32));
