@@ -41,10 +41,9 @@ fn main() {
     let mut v4=vec![10,2,17,4,20,7,12,32,5,70,54];
     let v3=insert(&mut v4);
     let v5=rx.recv();
-    let v6=mpsc::Sender::clone(&rx)
-    if let Ok(i)=&v5{
-        println!("{:?}",i);
-    }
+   for rec in rx{
+    println!("{:?}",rec);
+   }
     println!("insert!{:?}\n时间:{:?}",v3,start.elapsed());
     handle.join();
 }
