@@ -1286,4 +1286,53 @@ fn main() {
 ```
 ### 互斥器 ###
 1. 资源锁 避免多个进程修改同一资源
-2. 
+2. 数据被Mutex所拥有，要访问内部的数据，需要使用方法m.lock()向m申请一个锁, 该方法会阻塞当前线程，直到获取到锁，因此当多个线程同时访问该数据时，只有一个线程能获取到锁，其它线程只能阻塞着等待，这样就保证了数据能被安全的修改！
+```rust
+use std::{sync::{Mutex, Arc}, thread, rc::Rc};
+fn main() {
+ let mut m=Arc::new(Mutex::new(5));
+ let mut handles=Vec::new();
+ for n in 0..10{
+    let mut counter=Arc::clone(&m);
+  let handle=thread::spawn(move ||{
+        let mut num=counter.lock().unwrap();
+         *num+=1;
+    });
+    handles.push(handle);
+ }
+ for handle in handles{
+    handle.join().unwrap();
+ }
+
+ println!("{:?}",m);
+}
+```
+### 多线程下的Rc ###
+1. 于子线程需要通过move拿走锁的所有权，因此我们需要使用智能指针Rc<T>会出问题
+2. 好在，我们有Arc<T>，得益于它的内部计数器是多线程安全的，因此可以在多线程环境中使用:
+```rust
+use std::{sync::{Mutex, Arc}, thread, rc::Rc};
+fn main() {
+ let mut m=Arc::new(Mutex::new(5));
+ let mut handles=Vec::new();
+ for n in 0..10{
+    let mut counter=Arc::clone(&m);
+  let handle=thread::spawn(move ||{
+        let mut num=counter.lock().unwrap();
+         *num+=1;
+    });
+    handles.push(handle);
+ }
+ for handle in handles{
+    handle.join().unwrap();
+ }
+
+ println!("{:?}",m);
+}
+```
+3. 其中Rc<T>和RefCell<T>的结合，可以实现单线程的内部可变性。
+4. Mutex<T>可以支持修改内部数据，当结合Arc<T>一起使用时，可以实现多线程的内部可变性。
+5. 简单总结下：Rc<T>/RefCell<T>用于单线程内部可变性， Arc<T>/Mutex<T>用于多线程内部可变性。
+### Send 和 Sync ###
+1. 实现Send的类型可以在线程间安全的传递其所有权
+2. 实现Sync的类型可以在线程间安全的共享(通过引用)
