@@ -1336,3 +1336,58 @@ fn main() {
 ### Send 和 Sync ###
 1. 实现Send的类型可以在线程间安全的传递其所有权
 2. 实现Sync的类型可以在线程间安全的共享(通过引用)
+## 模式 ##
+1. 模式用来匹配值的结构
+2. 在rust中，应用到模式匹配的主要场景有如下几点：
+3. match分支
+4. if let表达式
+5. while let条件循环和for循环
+6. let语句
+7. 函数参数
+```rust
+
+fn main() {
+   let mut a=1;
+   match a {
+       0=>println!("0&"),
+       1=> println!("1"),
+       _ =>println!("no")
+   }
+   let mut color:Option<&str>=None;
+   if let Some(c)=color{
+      println!("{}",c);
+   }else if a==1{
+      println!("是1吗？");
+   }
+   while let None = color {
+       println!("不存在");
+       a+=1;
+       if a==7{
+         color=Some("你好");
+         println!("{:?}",&color);
+       }
+   }
+   while let None = color {
+      println!("不存在");
+      a+=1;
+      if a==7{
+        color=Some("你好");
+        println!("{:?}",&color);
+      }
+  }
+  let v=vec![1,2,3,16,5,7,10];
+  for (index,value) in v.iter().enumerate(){
+   println!("{}(){}",index,value);
+  }
+  let (x,_,z)=(1,2,3);
+  println!("{},{}",x,z);
+}
+```
+### 是否可驳模式 ###
+1. let Some(x) = some_option_value;
+2. 因为右边的值可能不为 Some，而是 None，这种时候就不能进行匹配，也就是上面的代码遗漏了 None 的匹配。
+3. 类似 let 和 for、match 都必须要求完全覆盖匹配，才能通过编译( 不可驳模式匹配 )。
+4. 可驳模式
+5. if let while let match 他们的作用就是处理可能失败的条件
+6. 不可驳模式
+7. let 函数 for 
