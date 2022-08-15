@@ -1349,7 +1349,10 @@ fn main() {
 fn main() {
    let mut a=1;
    match a {
-       0=>println!("0&"),
+       0|3=>println!("0&"),
+       0..3=>println("..3"),
+       //0|1|2|3
+       'a'..'j'=>println("a..j"),
        1=> println!("1"),
        _ =>println!("no")
    }
@@ -1391,3 +1394,29 @@ fn main() {
 5. if let while let match 他们的作用就是处理可能失败的条件
 6. 不可驳模式
 7. let 函数 for 
+### 解构 ###
+1. 类似js的解构赋值
+```rust
+ let p= Point{x:1,y:2};
+ let Point{x:a,y:b}=p;
+  assert_eq!(1,a);
+ assert_eq!(2,b);
+ println!("{}-{}_{}",a,b,_x);
+```
+### 忽略模式中的值 ###
+1. _用来忽略模式中的值
+```rust
+ let numbers=(1,32,4,487,87,87,12);
+ match numbers {
+   (first,second,third,..,last) if first!=0=> println!("{},{}",first,last),
+   _=>println!("出错了")
+ }
+```
+### 匹配守卫 ###
+```rust
+ let numbers=(1,32,4,487,87,87,12);
+ match numbers {
+   (first,second,third,..,last) if first!=0=> println!("{},{}",first,last),
+   _=>println!("出错了")
+ }
+```
