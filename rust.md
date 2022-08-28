@@ -849,6 +849,54 @@ impl<T:GetName+GetAge,U:getName> Person<T,U>{
   }
 }
 ```
+### 完全限定语法 ###
+```rust
+#[derive(Debug)]
+struct MyType{
+
+}
+trait A{
+ fn print(&self);
+}
+
+impl A for MyType {
+    fn print(&self){
+        println!("{:?} of A",self);
+    }
+}
+impl MyType{
+    fn print(&self){
+        println!("{:?}of Self",self);
+    }
+}
+fn main() {
+   let m=MyType{};
+   m.print();
+   //完全限定语法
+   <MyType as A>::print(&m);
+}
+```
+### 父trait ###
+```rust
+struct Point{
+    x:i32
+}
+impl Display for Point{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "({})", self.x)
+    }
+}
+impl Print for Point{
+    fn print(&self){
+        println!("{}",self.to_string());
+    }
+}
+fn main() {
+   //会调用一次fmt方法
+   let p=Point{x:3};
+   p.print();
+}
+```
 ## 生命周期 ##
 1. 生命周期的主要作用是避免悬垂引用，它会导致程序引用了本不该引用的数据
 ```rust
@@ -1005,6 +1053,43 @@ fn_no_mut(|mut z|{
    z="号";
    z
 });
+```
+## 高级函数 ##
+### 函数指针 ###
+1. 目的是为了将另一个函数作为参数传入到函数中
+2. 参数类型为fn fn被称为函数指针 指定参数为函数指针的语法类似闭包
+```rust
+fn add(x:i32)->i32{
+    x+1
+}
+fn do_twice(f:fn(i32)->i32,val:i32)->i32{
+   return f(val);
+}
+fn main(){
+   do_twice(add,12);
+}
+```
+### 闭包作为参数 ###
+```rust
+fn wapper_func<T>(t:T,v:i32)->i32
+    where T:Fn(i32)->i32{
+   return t(v);
+}
+fn main(){
+   let func=|val:i32|->i32{
+      val+1
+   };
+   println!("{}",wapper_func(func,17));
+}
+```
+### 闭包作为返回值 ###
+```rust
+fn return_fn()->fn(a:i32)->i32{
+   return |a|a+a
+}
+fn main(){
+   println!("{}",return_fn()(7));
+}
 ```
   ## 迭代器 ##
 + 迭代器允许我们迭代一个连续的集合，例如数组、动态数组 Vec、HashMap 等，
@@ -1427,6 +1512,41 @@ fn main() {
 3. 允许忽略借用规则 
 4. 不保证指向内存一定有效 且允许为空
 5. 需要手动清理
+```rust
+fn main() {
+   let mut num = 5;
+   let r1 = &mut num as *mut i32;
+   unsafe {
+      *r1=6;
+      println!("r1 is: {}", *r1);
+   }
+}
+```
+### unsafe函数 ###
+```rust
+unsafe fn dangerous(r:*mut i32) {
+   *r=6;
+   println!("r1 is: {}", *r);
+}
+fn main() {
+   let mut num = 5;
+   let r1 = &mut num as *mut i32;
+   unsafe{
+      dangerous(r1);
+   }
+}
+```
+### 修改全局静态变量 ###
+```rust
+static mut count:i8=12;
+fn main(){
+   unsfae{
+      count+=1;
+      println!("{}",count);
+   }
+}
+
+```
 ## 类型 ##
 ### 类型别名 ###
 1. 同TS
@@ -1446,4 +1566,3 @@ println!("{}",a+b);
 2. #[derive]，在之前多次见到的派生宏，可以为目标结构体或枚举派生指定的代码，例如 Debug 特征
 3. 类属性宏(Attribute-like macro)，用于为目标添加自定义的属性
 4. 类函数宏(Function-like macro)，看上去就像是函数调用
-### 声明式宏 ###

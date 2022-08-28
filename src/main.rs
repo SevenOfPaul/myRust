@@ -1,28 +1,50 @@
-use std::io::BufReader;
-use std::time;
-use std::{fs::File, io::{Write, Read}};
-use std::fs::OpenOptions;
-fn test()->!{
-    loop{}
+fn add(x:i32)->i32{
+    x+1
+}
+fn do_twice(f:fn(i32)->i32,val:i32)->i32{
+   return f(val);
+}
+fn wapper_func<T>(t:T,v:i32)->i32
+    where T:Fn(i32)->i32{
+   return t(v);
+}
+fn return_clo()->fn(i32)->i32{
+    |n|n
+}
+#[derive(Debug)]
+struct MyType{
+
+}
+trait A{
+ fn print(&self);
+}
+
+impl A for MyType {
+    fn print(&self){
+        println!("{:?} of A",self);
+    }
+}
+impl MyType{
+    fn print(&self){
+        println!("{:?}of Self",self);
+    }
 }
 fn main() {
-    let now=time::Instant::now();
-    let mut file=File::open("C:/Users/Paul/OneDrive/桌面/nest/rust/src/test.js").expect("no error");
-     let mut s2=String::new();
-     file.read_to_string(& mut s2);
-    // let mut buffer=BufReader::new(&file);
-    // buffer.read_to_string( &mut s2);
-     println!("{}",&s2);
-      println!("{:?}",now.elapsed());
-    // let s="now";
-    // let mut file = OpenOptions::new()
-    // .read(true)
-    // .append(true)
-    // .create(true)
-    // .open("./test.js")
-    // .unwrap();
-  
-    // file.write_all(s.as_bytes());
-    
-    // println!("{:?}",s2)
+    let func=|val:i32|->i32{
+        val+1
+    };
+    let f=&return_clo() as *const fn(i32) -> i32;
+    unsafe {
+        let h= *f;
+        println!("{}", h(7));
+    }
+    let m=MyType{};
+    m.print();
+    //完全限定语法
+    <MyType as A>::print(&m);
+    println!("{}", do_twice(add,12));
+    println!("{}",0.1+0.2);
+   println!("{}",wapper_func(func,17));
+    // println!("{:?}",return_clo());
+    println!("hello world");
 }
