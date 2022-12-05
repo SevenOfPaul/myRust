@@ -1,7 +1,3 @@
-use std::alloc::{alloc, dealloc, handle_alloc_error, realloc, Layout};
-use std::ops::{Deref, DerefMut};
-use std::path::Iter;
-use std::ptr::NonNull;
 /**
 use std::ptr::{Unique,self};
 untie
@@ -31,7 +27,10 @@ impl<T> Unique<T>{
 }
 **/
 use std::{mem, ptr, slice};
-
+use std::alloc::{alloc, dealloc, handle_alloc_error, realloc, Layout};
+use std::ops::{Deref, DerefMut};
+use std::path::Iter;
+use std::ptr::NonNull;
 #[derive(Debug)]
 struct MVec<T> {
     ptr: NonNull<T>,
@@ -134,6 +133,24 @@ impl<T> MVec<T> {
                 self.len - pos as usize,
             );
             self.len -= 1;
+        }
+    }
+    fn into_iter(self)->IntoIter<T>{
+        let ptr=self.ptr;
+        let cap=self.cap;
+        let len=self.len;
+        mem::forget(self);
+        unsafe {
+            IntoIter{
+                buf:ptr,
+                cap,
+                start:ptr.as_ptr(),
+                end:if(cap==0){
+                    ptr.as_ptr()
+                }else{
+                    ptr.as_ptr().offset(len as isize)
+                }
+            }
         }
     }
     //-----------------
