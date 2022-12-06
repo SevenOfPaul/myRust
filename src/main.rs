@@ -31,6 +31,7 @@ use std::alloc::{alloc, dealloc, handle_alloc_error, realloc, Layout};
 use std::ops::{Deref, DerefMut};
 use std::path::Iter;
 use std::ptr::NonNull;
+
 #[derive(Debug)]
 struct MVec<T> {
     ptr: NonNull<T>,
@@ -71,6 +72,7 @@ impl<T> MVec<T> {
             }
             if let Some(ptr) = NonNull::new(ptr as *mut _) {
                 self.ptr = ptr;
+                self.cap=new_cap;
             } else {
                 panic!("error");
             }
@@ -148,7 +150,7 @@ impl<T> MVec<T> {
                 end:if(cap==0){
                     ptr.as_ptr()
                 }else{
-                    ptr.as_ptr().offset(len as isize)
+                    ptr.as_ptr().add(len)
                 }
             }
         }
@@ -186,6 +188,7 @@ impl<T> DerefMut for MVec<T> {
         unsafe { slice::from_raw_parts_mut(self.ptr.as_ptr(), self.len) }
     }
 }
+#[derive(Debug)]
 struct IntoIter<T> {
     buf: NonNull<T>,
     cap: usize,
@@ -213,13 +216,14 @@ impl<T> Iterator for IntoIter<T> {
             None
         } else {
             unsafe {
+                let result = ptr::read(self.start);
                 self.start = self.start.offset(1);
-                Some(ptr::read(self.start))
+                Some(result)
             }
         }
     }
     fn size_hint(&self) -> (usize, Option<usize>) {
-       let len=((self.end as usize-self.start as usize)/mem::size_of::<T>());
+        let len=((self.end as usize-self.start as usize)/mem::size_of::<T>());
         (len,Some(len))
     }
 }
@@ -242,19 +246,13 @@ fn main() {
         vec.push(1);
         vec.push(2);
         vec.push(3);
-        let v = &mut vec[0..1];
-        v[0] = 2;
-        println!("{:?}", v);
-        println!("{}", vec.get(0).unwrap());
-        println!("{:?}", vec);
-        vec.push(5);
-        vec.insert(3, 8);
-        vec.push(6);
-        vec.remove(0);
-        println!("{}", vec.len);
-        println!("{:?}", &vec[0..5]);
-        println!("{}", vec.pop().unwrap());
-        println!("{}", vec.pop().unwrap());
-        drop(vec);
+        vec.push(4);
+        // let v = &mut vec[0..1];
+        // println!("{:?}",vec.into_iter());
+        let iter=vec.into_iter();
+        for v in iter.rev(){
+            println!("{}",v);
+        }
+        // drop(vec);
     }
 }
