@@ -1,54 +1,28 @@
-/**
-use std::ptr::{Unique,self};
-untie
-#[derive(Debug)]
-struct Unique<T> {
-    ptr: *const T,
-    // _marker:PhantomData<T>
-}
-unsafe impl <T:Send> Send for Unique<T>{}
-unsafe impl <T:Sync> Sync for Unique<T>{}
-impl<T> Unique<T>{
-    const unsafe fn new_checked(ptr:*mut T)->Self{
-        unsafe {
-            Unique{ ptr}
-        }
-    }
-    fn new(ptr:*mut T)->Option<Self>{
-        if !ptr.is_null(){
-          Some(Unique{ ptr})
-        }else{
-            None
-        }
-    }
-    fn as_ptr(&self)-> *mut T{
-        self.ptr as *mut T
-    }
-}
-**/
 use std::{mem, ptr, slice};
 use std::alloc::{alloc, dealloc, handle_alloc_error, realloc, Layout};
 use std::ops::{Deref, DerefMut};
 use std::path::Iter;
 use std::ptr::NonNull;
 #[derive(Debug)]
-struct MVec<T> {
+struct Raw<T>{
     ptr: NonNull<T>,
-    len: usize,
     cap: usize,
 }
-impl<T> MVec<T> {
-    fn new() -> Self {
+impl<T> Raw<T>{
+    fn new()->Self{
+        let cap=if mem::size_of::<T>()==0{!0}else{0};
         assert_ne!(mem::size_of::<T>(), 0, "零尺寸类型无法处理");
-        MVec {
-            ptr: NonNull::dangling(),
-            len: 0,
-            cap: 0,
+        Raw{
+            ptr:NonNull::dangling(),
+            cap:cap
         }
     }
     //内存分配
     fn grow(&mut self) {
         unsafe {
+            // 因为当 T 的尺寸为 0 时我们设置了 cap 为 usize::MAX
+            // 这一步成立意味着 Vec 溢出了
+            assert!(mem::size_of::<T>() != 0, "capacity overflow");
             //获取到类型对齐方式
             let align = mem::align_of::<T>();
             let elem_size = mem::size_of::<T>();
@@ -77,12 +51,48 @@ impl<T> MVec<T> {
             }
         }
     }
+}
+impl<T> Drop for Raw<T> {
+    fn drop(&mut self) {
+        let ele_size=mem::size_of::<T>();
+        if self.cap!= 0&&ele_size!=0 {
+            //取出元素
+            //回收内存
+            let align = mem::align_of::<T>();
+            let elem_size = mem::size_of::<T>();
+            let num_bytes = elem_size * self.cap;
+            unsafe {
+                let layout=Layout::from_size_align_unchecked(num_bytes, align);
+                dealloc(self.ptr.as_ptr() as *mut u8,layout);
+            }
+        }
+        println!("内存释放");
+    }
+}
+#[derive(Debug)]
+struct MVec<T> {
+    raw: Raw<T>,
+    len: usize,
+}
+impl<T> MVec<T> {
+    fn new() -> Self {
+        MVec {
+            raw: Raw::new(),
+            len: 0,
+        }
+    }
+    fn ptr(&self)->*mut T{
+        self.raw.ptr.as_ptr()
+    }
+    fn cap(&self)->usize{
+        self.raw.cap
+    }
     unsafe fn push(&mut self, val: T) {
-        if self.len == self.cap {
-            self.grow();
+        if self.len == self.cap() {
+            self.raw.grow()
         }
         unsafe {
-            ptr::write(self.ptr.as_ptr().offset(self.len as isize), val);
+            ptr::write(self.ptr().offset(self.len as isize), val);
         }
 
         self.len += 1;
@@ -92,14 +102,14 @@ impl<T> MVec<T> {
             None
         } else {
             self.len -= 1;
-            unsafe { Some(ptr::read(self.ptr.as_ptr().offset(self.len as isize))) }
+            unsafe { Some(ptr::read(self.ptr().offset(self.len as isize))) }
         }
     }
     fn get(&self, index: usize) -> Option<T> {
         if index < self.len {
             unsafe {
                 //这里count会直接获取到size
-                Some(ptr::read(self.ptr.as_ptr().offset(index as isize)))
+                Some(ptr::read(self.ptr().offset(index as isize)))
             }
         } else {
             None
@@ -108,18 +118,18 @@ impl<T> MVec<T> {
     //----------------
     fn insert(&mut self, pos: usize, val: T) {
         assert!(pos < self.len, "下标越界");
-        if self.cap == self.len {
-            self.grow();
+        if self.cap() == self.len {
+            self.raw.grow();
         }
         unsafe {
             ptr::copy(
                 //移动哪里的内存
-                self.ptr.as_ptr().offset(pos as isize),
+                self.ptr().offset(pos as isize),
                 //移动到内存
-                self.ptr.as_ptr().offset((pos + 1) as isize),
+                self.ptr().offset((pos + 1) as isize),
                 self.len - pos as usize,
             );
-            ptr::write(self.ptr.as_ptr().offset(pos as isize), val);
+            ptr::write(self.ptr().offset(pos as isize), val);
         }
         self.len += 1;
     }
@@ -128,84 +138,59 @@ impl<T> MVec<T> {
         unsafe {
             ptr::copy(
                 //移动哪里的内存
-                self.ptr.as_ptr().offset((pos + 1) as isize),
+                self.ptr().offset((pos + 1) as isize),
                 //移动到内存
-                self.ptr.as_ptr().offset(pos as isize),
+                self.ptr().offset(pos as isize),
                 self.len - pos as usize,
             );
             self.len -= 1;
         }
     }
-    fn into_iter(self)->IntoIter<T>{
-        let ptr=self.ptr;
-        let cap=self.cap;
+    unsafe fn into_iter(self) ->IntoIter<T>{
+        let ptr=ptr::read(&self.raw);
+        let cap=self.cap();
         let len=self.len;
         mem::forget(self);
         unsafe {
             IntoIter{
-                buf:ptr,
-                cap,
-                start:ptr.as_ptr(),
-                end:if(cap==0){
-                    ptr.as_ptr()
+                start:ptr.ptr.as_ptr(),
+                end:if mem::size_of::<T>()==0 {
+                    (ptr.ptr.as_ptr() as usize +len) as *const _
+                }else if(cap==0){
+                    ptr.ptr.as_ptr()
                 }else{
-                    ptr.as_ptr().add(len)
-                }
+                    ptr.ptr.as_ptr().add(len)
+                },
+                _buf:ptr
             }
         }
     }
     //-----------------
 }
-impl<T> Drop for MVec<T> {
-    fn drop(&mut self) {
-        if self.cap != 0 {
-            //取出元素
-            while let Some(_) = self.pop() {}
-            //回收内存
-            let align = mem::align_of::<T>();
-            let elem_size = mem::size_of::<T>();
-            let num_bytes = elem_size * self.cap;
-            unsafe {
-                let layout = Layout::from_size_align_unchecked(num_bytes, align);
-                dealloc(self.ptr.as_ptr() as *mut _, layout)
-            }
-        }
-        println!("内存释放");
-    }
-}
 impl<T> Deref for MVec<T> {
     //切片类型
     type Target = [T];
     fn deref(&self) -> &Self::Target {
-        unsafe { slice::from_raw_parts(self.ptr.as_ptr(), self.len) }
+        unsafe { slice::from_raw_parts(self.ptr(), self.len) }
     }
 }
 impl<T> DerefMut for MVec<T> {
     // type Target =  [T];
     //切片类型
     fn deref_mut(&mut self) -> &mut [T] {
-        unsafe { slice::from_raw_parts_mut(self.ptr.as_ptr(), self.len) }
+        unsafe { slice::from_raw_parts_mut(self.ptr(), self.len) }
     }
 }
 #[derive(Debug)]
 struct IntoIter<T> {
-    buf: NonNull<T>,
-    cap: usize,
+    _buf: Raw<T>,
     start: *const T,
     end: *const T,
 }
+
 impl<T> Drop for IntoIter<T> {
     fn drop(&mut self) {
-        if self.cap != 0 {
             for _ in &mut *self {}
-            let align = mem::align_of::<T>();
-            let elem_size = mem::size_of::<T>();
-            let num_bytes = elem_size * self.cap;
-            unsafe {
-                let layout = Layout::from_size_align_unchecked(num_bytes, align);
-                dealloc(self.buf.as_ptr() as *mut _, layout)
-            }
-        }
     }
 }
 impl<T> Iterator for IntoIter<T> {
@@ -216,13 +201,19 @@ impl<T> Iterator for IntoIter<T> {
         } else {
             unsafe {
                 let result = ptr::read(self.start);
-                self.start = self.start.offset(1);
+            if mem::size_of::<T>()==0{
+                    self.start=  (self.start as usize+1) as *const _;
+                Some(ptr::read(NonNull::<T>::dangling().as_ptr()))
+                }else{
+                self.start =self.start.offset(1);
                 Some(result)
+                }
             }
         }
     }
     fn size_hint(&self) -> (usize, Option<usize>) {
-       let len=((self.end as usize-self.start as usize)/mem::size_of::<T>());
+        let ele_size=mem::size_of::<T>();
+        let len=((self.end as usize-self.start as usize)/if ele_size==0{1}else{ele_size});
         (len,Some(len))
     }
 }
@@ -233,8 +224,13 @@ impl<T> DoubleEndedIterator for IntoIter<T>{
         }else {
             unsafe {
                 //向前回滚一位
-                self.end = self.end.offset(-1);
-                Some(ptr::read(self.end))
+               if mem::size_of::<T>()==0{
+                   self.end = (self.end as usize -1) as *const _;
+                    Some(ptr::read(NonNull::<T>::dangling().as_ptr()))
+                }else{
+                   self.end =self.end.offset(-1);
+                    Some(ptr::read(self.end))
+                }
             }
         }
     }
@@ -246,12 +242,12 @@ fn main() {
         vec.push(2);
         vec.push(3);
         vec.push(4);
-        // let v = &mut vec[0..1];
+        let v = &mut vec[0..1];
         // println!("{:?}",vec.into_iter());
         let iter=vec.into_iter();
-for v in iter.rev(){
-    println!("{}",v);
-}
+        for v in iter.rev(){
+            println!("{}",v);
+        }
         // drop(vec);
     }
 }
