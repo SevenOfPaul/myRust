@@ -14,11 +14,15 @@ impl Trie {
     }
     fn insert(&mut self, word: String) {
         let mut node=self;
+        //要点1
       for s in word.bytes(){
+          //要点2
           let index=(s - b'a') as usize;
+          //要点3
        if node.nexts[index].is_none(){
            //不存在
            node.nexts[index]=Some(Box::new(Trie::new()));
+           //要点4
            node=node.nexts[index].as_deref_mut().unwrap();
            node.pas+=1;
        }else{
