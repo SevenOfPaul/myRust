@@ -1,33 +1,66 @@
-struct Soultion{
-    val:Vec<i32>
+use std::borrow::BorrowMut;
+use std::cell::RefCell;
+use std::cell::Ref;
+#[derive(Default)]
+struct Trie {
+    pas:i32,
+    end:i32,
+    nexts:[Option<Box<Trie>>;26]
 }
-impl Soultion{
-    pub fn kth_largest_number(nums: Vec<String>, k: i32) -> String {
-        let temp=&mut nums.into_iter().map(|s|{s.parse::<i32>().unwrap()}).collect::<Vec<_>>();
-        println!("{:?}",temp);
-        // quickSort(arr)[(k as usize)-1].to_string()
-        String::new()
-    }
-}
-fn quickSort(arr: &mut Vec<i32>) ->Vec<i32>{
+impl Trie {
 
-    if arr.len()<=1{
-        return arr.clone()
+    fn new() -> Self {
+        Trie::default()
     }
-    let  left:&mut Vec<i32>=&mut Vec::new();
-    let  right:&mut Vec<i32>=&mut Vec::new();
-    let provide=vec![arr[0]];
-    for i in 1..arr.len(){
-        if arr[i]>=provide[0]{
-            left.push(arr[i]);
-        }else{
-            right.push(arr[i]);
+    fn insert(&mut self, word: String) {
+        let mut node=self;
+      for s in word.bytes(){
+          let index=(s - b'a') as usize;
+       if node.nexts[index].is_none(){
+           //不存在
+           node.nexts[index]=Some(Box::new(Trie::new()));
+           node=node.nexts[index].as_deref_mut().unwrap();
+           node.pas+=1;
+       }else{
+     //存在
+           node=node.nexts[index].as_deref_mut().unwrap();
+           node.pas+=1;
+       }
+      }
+        node.end+=1;
+    }
+
+    fn search(& self, word: String) -> bool {
+        let mut node=self;
+        for s in word.bytes(){
+            let index=(s-b'a') as usize;
+            if !node.nexts[index].is_none(){
+                node= node.nexts[index].as_deref().unwrap();
+            }else{
+                return false
+            }
         }
+       if node.end!=0{
+           return true
+       }else{
+           return false
+       }
     }
-    return vec![quickSort(left),provide,quickSort(right)].concat()
+
+    fn starts_with(&self, prefix: String) -> bool {
+        let mut node=self;
+        for s in prefix.bytes(){
+            let index=(s-b'a') as usize;
+            if !node.nexts[index].is_none(){
+                node= node.nexts[index].as_deref().unwrap();
+            }else{
+                return false
+            }
+        }
+        return true
+    }
 }
+
 fn main(){
-let mut arr =vec!["1", "20", "300", "400","12542","50000"];
-   println!("{:?}",arr.sort_by(|a,b|a.cmp(b)));
-    println!("{:?}",arr);
+
 }
