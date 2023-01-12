@@ -1,70 +1,27 @@
-use std::borrow::BorrowMut;
-use std::cell::RefCell;
-use std::cell::Ref;
-#[derive(Default)]
-struct Trie {
-    pas:i32,
-    end:i32,
-    nexts:[Option<Box<Trie>>;26]
-}
-impl Trie {
+ pub fn sort(nums:Vec<i32>)->Vec<i32>{
+        if nums.len()<2{
+            return nums
+        }
+        let mut left=Vec::new();
+        left.extend_from_slice(&nums[0..nums.len()>>1]);
 
-    fn new() -> Self {
-        Trie::default()
+        let mut right=Vec::new();
+        right.extend_from_slice(&nums[nums.len()>>1..nums.len()]);
+        Solution::merge(Solution::sort(left),Solution::sort(right))
     }
-    fn insert(&mut self, word: String) {
-        let mut node=self;
-        //要点1
-      for s in word.bytes(){
-          //要点2
-          let index=(s - b'a') as usize;
-          //要点3
-       if node.nexts[index].is_none(){
-           //不存在
-           node.nexts[index]=Some(Box::new(Trie::new()));
-           //要点4
-           node=node.nexts[index].as_deref_mut().unwrap();
-           node.pas+=1;
-       }else{
-     //存在
-           node=node.nexts[index].as_deref_mut().unwrap();
-           node.pas+=1;
-       }
-      }
-        node.end+=1;
-    }
-
-    fn search(& self, word: String) -> bool {
-        let mut node=self;
-        for s in word.bytes(){
-            let index=(s-b'a') as usize;
-            if !node.nexts[index].is_none(){
-                node= node.nexts[index].as_deref().unwrap();
+    pub fn merge(mut left:Vec<i32>,mut right:Vec<i32>)->Vec<i32>{
+        let mut res=vec![];
+        while  left.len()!=0&&right.len()!=0 {
+            if left.last().unwrap()>right.last().unwrap(){
+                res.push(right.pop().unwrap());
             }else{
-                return false
+                res.push(left.pop().unwrap());
             }
         }
-       if node.end!=0{
-           return true
-       }else{
-           return false
-       }
+        res.extend_from_slice(&left[0..left.len()]);
+        res.extend_from_slice(&right[0..left.len()]);
+        res
     }
-
-    fn starts_with(&self, prefix: String) -> bool {
-        let mut node=self;
-        for s in prefix.bytes(){
-            let index=(s-b'a') as usize;
-            if !node.nexts[index].is_none(){
-                node= node.nexts[index].as_deref().unwrap();
-            }else{
-                return false
-            }
-        }
-        return true
-    }
-}
-
 fn main(){
 
 }
