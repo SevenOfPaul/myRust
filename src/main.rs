@@ -1,4 +1,57 @@
 mod trino;
+
+fn print(n: i32) {
+    let mut i = 31;
+    while i >= 0 {
+        if n & (1 << i) == 0 {
+            print!("{}", '0');
+        } else {
+            print!("{}", '1');
+        }
+        i -= 1;
+    }
+    println!("")
+}
+fn add(sum: i32, carry: i32) -> i32 {
+    if carry == 0 {
+        return sum;
+    }
+    return add(sum ^ carry, (sum & carry) << 1);
+}
+fn pow(mut a: i32, mut b: i32) -> i32 {
+    let mut res = 1;
+    while b != 0 {
+        if b & 1 != 0 {
+            res = res * a;
+        }
+        a *= a;
+        b >>= 1;
+    }
+    return res;
+}
+fn count_primes(n: i32) -> i32 {
+    let num: i64 = n as i64;
+    let mut primes = vec![i32::MAX; (n / 31) as usize + 1];
+    let mut res = 0;
+    //将指定位改为0
+    primes[0] &= !(1 << 0);
+    primes[0] &= !(1 << 1);
+    for idx in 2..n {
+        if primes[(idx / 31) as usize] & (1 << (idx % 31)) != 0 {
+            let mut j = (idx as i64 * idx as i64);
+            while j < n as i64 {
+                primes[(j / 31) as usize] &= !(1 << (j % 31));
+                j += idx as i64;
+            }
+        }
+    }
+    for idx in 0..n {
+        if primes[(idx / 31) as usize] & (1 << (idx % 31)) != 0 {
+            res += 1;
+        }
+    }
+    res
+}
 use std::collections::{*};
 use std::collections::binary_heap::BinaryHeap;
 
